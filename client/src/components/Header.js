@@ -29,7 +29,7 @@ export default class Header extends Component {
     switch (this.state.loggedIn) {
       case false: // not logged in
         return (
-          <li><a href="/auth/github">Login With Github</a></li>
+          <li key="0"><a href="/auth/github">Login With Github</a></li>
         );
       case true:
         return [ // simple hardcoded array, so simple hardcoded keys
@@ -42,7 +42,7 @@ export default class Header extends Component {
 
   render() {
     return (
-      <nav>
+      <nav style={{ 'paddingLeft': 25, 'paddingRight': 25 }}>
         <div className="nav-wrapper">
           <Link to='/' className="left brand-logo">
             Network

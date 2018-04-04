@@ -8,7 +8,7 @@ module.exports = (app) => {
     res.send('You are a new user, who should sign up!');
   });
 
-  app.get('/userCount', async (req, res, next) => {
+  app.get('/api/userCount', async (req, res, next) => {
     const userCount = await User.find({}).length;
 
     res.json({ userCount });

@@ -1,19 +1,18 @@
 const requireLogin = require('./../middleware/requireLogIn');
 
+const mongoose = require('mongoose');
+const User = mongoose.model('user');
+
 module.exports = (app) => {
-  app.post('/newUser', (req, res, next) => {
+  app.post('/api/newUser', (req, res, next) => {
     res.send('You are a new user, who should sign up!');
   });
 
-  app.get('/others', requireLogin, (req, res, next) => {
-    res.send('Here is a list of the other users');
+  app.get('/userCount', async (req, res, next) => {
+    const userCount = await User.find({}).length;
 
-    // Add ability to filter by existing fields
+    res.json({ userCount });
   });
 
-  app.get('/othersCloseBy', requireLogin, (req, res, next) => {
-    res.send('Here are the users near you');
-
-    // have option to filter by state or by city/state
-  });
+  // TODO: Make route to get userCount for specific state, with optional parameter of city
 };

@@ -9,7 +9,7 @@ module.exports = (app) => {
   app.get('/auth/github/callback',
     passport.authenticate('github'),
     (req, res, next) => {
-      res.redirect('/');
+      res.redirect('http://localhost:3000/');
     });
 
   app.get('/auth/logout', (req, res, next) => {

@@ -14,5 +14,11 @@ module.exports = (app) => {
     res.json({ userCount });
   });
 
+  app.get('/api/people', async (req, res, next) => {
+    const users = await User.find({});
+
+    res.json(users);
+  });
+
   // TODO: Make route to get userCount for specific state, with optional parameter of city
 };

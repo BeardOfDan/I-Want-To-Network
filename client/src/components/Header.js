@@ -33,7 +33,8 @@ export default class Header extends Component {
         );
       case true:
         return [ // simple hardcoded array, so simple hardcoded keys
-          <li key="0"><a href="/auth/logout">Logout</a></li>
+          <li key="0"><Link to="/profile">Profile</Link></li>,
+          <li key="1"><a href="/auth/logout">Logout</a></li>
         ];
       default: // pending
         return undefined;

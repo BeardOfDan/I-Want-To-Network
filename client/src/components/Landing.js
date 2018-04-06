@@ -33,13 +33,21 @@ export default class Landing extends Component {
   }
 
   makePersonCard(person) {
+    // Inline styling variable
+    const borderRadius = '5%';
+
+    // Handle optional fields
+    const location = (person.city ? (person.city + ', ') : '') + (person.state ? person.state : '');
+    const linkedin = (<a href={person.linkedin} target="_blank" className="btn btn-primary" style={{ borderRadius, 'marginBotton': 5 }}>{person.linkedin ? 'Check Out My LinkedIn' : ''}</a>);
+
     return (
-      <div key={person.id} className="card" style={{'width': '18rem'}}>
-        <img className="card-img-top" src={person.photoURL} alt={person.username + '\'s pic'} />
-        <div className="card-body">
+      <div key={person.id} className="card" style={{ 'width': '18rem', borderRadius }}>
+        <img className="card-img-top" src={person.photoURL} alt={person.username + '\'s profile pic'} style={{ 'borderTopRightRadius': borderRadius, 'borderTopLeftRadius': borderRadius }} />
+        <div className="card-body" style={{ borderRadius }}>
           <h5 className="card-title">{person.username}</h5>
-          <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href={person.githubURL} className="btn btn-primary">Check Out My Github</a>
+          <p className="card-text">{location ? location : ''}</p>
+          {person.linkedin ? linkedin : ''}
+          <a href={person.githubURL} target="_blank" className="btn btn-success" style={{ borderRadius }}>Check Out My Github</a>
         </div>
       </div>
     );

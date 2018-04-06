@@ -20,5 +20,15 @@ module.exports = (app) => {
     res.json(users);
   });
 
+  app.post('/api/updateProfile', (req, res, next) => {
+    const { linkedin, state, city } = req.body;
+
+    // TODO: check if the variables have a value
+
+    // TODO: update valid variables
+
+    res.send('You updated your profile!');
+  });
+
   // TODO: Make route to get userCount for specific state, with optional parameter of city
 };

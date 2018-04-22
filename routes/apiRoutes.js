@@ -24,6 +24,20 @@ module.exports = (app) => {
     const { linkedin, state, city } = req.body;
 
     // TODO: check if the variables have a value
+    const values = {};
+
+    if (linkedin) {
+      values.linkedin = linkedin;
+    }
+
+    if (state) {
+      values.state = state;
+
+      // don't have a city without a state
+      if (city) {
+        values.city = city;
+      }
+    }
 
     // TODO: update valid variables
 

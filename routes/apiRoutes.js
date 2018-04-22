@@ -40,7 +40,7 @@ module.exports = (app) => {
     }
 
     // TODO: update valid variables
-    const updatedUser = await mongoose.findOneAndUpdate({ '_id': user.id }, { '$set': values })
+    const updatedUser = await User.findOneAndUpdate({ '_id': user.id }, { '$set': values })
       .catch((e) => {
         res.send({ 'error': `Could not update user with id ${user.id}` });
       });
@@ -56,5 +56,7 @@ module.exports = (app) => {
   }); // end of post '/api/updateProfile'
 
   // TODO: Make route to get userCount for specific state, with optional parameter of city
+  app.get('api/userCount', async (req, res, next) => {
 
+  });
 };

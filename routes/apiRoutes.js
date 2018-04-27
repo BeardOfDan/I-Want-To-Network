@@ -56,39 +56,14 @@ module.exports = (app) => {
     res.json(userCount);
   });
 
-  app.get('/api/userCountbyState:state', async (req, res, next) => {
+  app.get('/api/userCountFiltered/:state', requireLogin, async (req, res, next) => {
     const { state } = req.params;
+    const city = req.query.city;
 
-    if (typeof state === 'string') {
-      const users = (await User.find({ state }));
+    const userCount = city ? (await User.find({ state, city })).length : (await User.find({ state })).length;
+    const location = city ? `${city}, ${state}` : state;
 
-      if (users) {
-        return res.json(users.length);
-      }
-
-      return res.json(0); // None
-    }
-
-    res.json({ 'error': 'A valid state is required' });
+    return res.json({ userCount, location });
   });
 
-  //  NOTE: the state is required, otherwise, it won't necessarily be the correct city
-  app.get('/api/userCount:state&:city', async (req, res, next) => {
-    const { state, city } = req.params;
-
-    console.log(Date.now());
-    console.log(`\nstate: ${state}   |   city: ${city}\n`);
-
-    if ((typeof state === 'string') && (typeof city === 'string')) {
-      const userCount = (await User.find({ state, city })).length;
-
-      if (userCount) {
-        return res.json({ userCount });
-      }
-
-      return res.json(0); // None
-    }
-
-    res.json({ 'error': 'Both a valid state AND a valid city are required' });
-  });
 };

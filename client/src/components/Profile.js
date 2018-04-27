@@ -8,7 +8,7 @@ export default class Profile extends Component {
 
     this.state = {
       'user': null,
-      'linkedin': null,
+      'linkedIn': null,
       'state': null,
       'city': null
     };
@@ -25,6 +25,12 @@ export default class Profile extends Component {
       }));
 
     this.setState({ 'user': (user ? user : false) });
+  }
+
+  addLinkedIn() {
+    const URL = document.getElementById('linkedInURL').value;
+
+    this.setState({'linkedInURL': URL});
   }
 
   pageContent() {
@@ -53,7 +59,7 @@ export default class Profile extends Component {
               <br />
               <FormGroup>
                 <label>LinkedIn URL</label>
-                <input type="text" autoFocus /* onChange={this.addPollName.bind(this)} */ placeholder="LinkedIn URL" />
+                <input type="text" id="linkedInURL" autoFocus onChange={this.addLinkedIn.bind(this)} placeholder="LinkedIn URL" />
               </FormGroup>
               <FormGroup inline="true">
                 <label>State:</label>

@@ -3,6 +3,8 @@ const requireLogin = require('./../middleware/requireLogIn');
 const mongoose = require('mongoose');
 const User = mongoose.model('user');
 
+const _ = require('lodash');
+
 module.exports = (app) => {
   app.post('/api/newUser', (req, res, next) => {
     res.send('You are a new user, who should sign up!');
@@ -16,8 +18,6 @@ module.exports = (app) => {
 
   app.post('/api/updateProfile', requireLogin, async (req, res, next) => {
     const { linkedin, state, city } = req.body;
-
-    // TODO: check if the variables have a value
     const values = {};
 
     if (typeof linkedin === 'string') {
@@ -33,7 +33,6 @@ module.exports = (app) => {
       }
     }
 
-    // TODO: update valid variables
     const updatedUser = await User.findOneAndUpdate({ '_id': user.id }, { '$set': values })
       .catch((e) => {
         res.json({ 'error': `Could not update user with id ${user.id}` });

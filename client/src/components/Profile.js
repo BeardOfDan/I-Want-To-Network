@@ -7,6 +7,7 @@ export default class Profile extends Component {
     super(props);
 
     this.state = {
+      'action': null,
       'user': null,
       'linkedIn': null,
       'state': null,
@@ -30,10 +31,46 @@ export default class Profile extends Component {
   addLinkedIn() {
     const URL = document.getElementById('linkedInURL').value;
 
-    this.setState({'linkedInURL': URL});
+    this.setState({ 'linkedInURL': URL });
+  }
+
+  addState() {
+    const state = document.getElementById('state').value;
+
+    this.setState({ state });
+  }
+
+  addCity() {
+    const city = document.getElementById('city').value;
+
+    this.setState({ city });
+  }
+
+  handleSubmission(e) {
+    e.preventDefault();
+
+    console.log('\nThe state:');
+    console.log(JSON.stringify(this.state, undefined, 2) + '\n');
+
+    // Evaluate the state variables
+
+    // send axios.post request to server
+
+    // temp change pageContent to an 'updating user data...' message
+
+    // receive response to request
+
+    // if valid, make success screen
+    // also put big button to prompt the user to return to the home page or something
+
+    // else, present error message, prompt the user to try again later
   }
 
   pageContent() {
+    if (this.state.action) { // if submitting/ed change
+
+    }
+
     switch (this.state.user) { // handle authentication status
       case false: // The user is NOT logged in
         return (
@@ -51,7 +88,7 @@ export default class Profile extends Component {
       default: // The user is logged in
         return (
           <Grid>
-            <Form /*onSubmit={this.handleSubmission.bind(this)} */>
+            <Form onSubmit={this.handleSubmission.bind(this)} >
               <br />
               <FormGroup>
                 <h5>Add more personal info:</h5>
@@ -63,11 +100,11 @@ export default class Profile extends Component {
               </FormGroup>
               <FormGroup inline="true">
                 <label>State:</label>
-                <input id="newPollOption" type="text" placeholder="State" /* onKeyPress={this.newPollOptionKeyCapture.bind(this)} */ />
+                <input id="state" type="text" placeholder="State" onKeyPress={this.addState.bind(this)} />
               </FormGroup>
               <FormGroup inline="true">
                 <label>City:</label>
-                <input id="newPollOption" type="text" placeholder="City" /* onKeyPress={this.newPollOptionKeyCapture.bind(this)} */ />
+                <input id="city" type="text" placeholder="City" onKeyPress={this.addCity.bind(this)} />
               </FormGroup>
               <input type="submit" />
 

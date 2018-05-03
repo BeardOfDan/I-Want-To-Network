@@ -54,6 +54,20 @@ export default class Profile extends Component {
 
     // Evaluate the state variables
 
+    const values = {};
+
+    if (this.state.state) {
+      values.state = this.state.state;
+
+      if (this.state.city) {
+        values.city = this.state.city;
+      }
+    }
+
+    if (this.state.linkedIn) {
+      values.linkedIn = this.state.linkedIn;
+    }
+
     // send axios.post request to server
 
     // temp change pageContent to an 'updating user data...' message
@@ -67,8 +81,26 @@ export default class Profile extends Component {
   }
 
   pageContent() {
-    if (this.state.action) { // if submitting/ed change
+    switch (this.state.action) {
+      case 'pending':
+        return (
+          <div>
+            <h3>Updating your profile...</h3>
+          </div>
+        );
 
+      case 'success':
+        break;
+
+      case 'error':
+        break;
+
+      case null:
+        // do nothing, let the next switch handle it
+        break;
+
+      default:
+        console.log(`Error! Attempted to change profile, but state.action had an invalid value! state.action="${JSON.stringify(this.state.action, undefined, 2)}"`);
     }
 
     switch (this.state.user) { // handle authentication status

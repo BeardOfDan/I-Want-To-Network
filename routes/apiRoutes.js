@@ -17,11 +17,11 @@ module.exports = (app) => {
   });
 
   app.post('/api/updateProfile', requireLogin, async (req, res, next) => {
-    const { linkedin, state, city } = req.body;
+    const { linkedIn, state, city } = req.body.values;
     const values = {};
 
-    if (typeof linkedin === 'string') {
-      values.linkedin = linkedin;
+    if (typeof linkedIn === 'string') {
+      values.linkedin = linkedIn;
     }
 
     if (typeof state === 'string') {

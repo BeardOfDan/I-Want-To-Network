@@ -8,7 +8,7 @@ const cookieSession = require('cookie-session');
 const PORT = process.env.PORT || 5000;
 const KEYS = require('./config/keys');
 
-express.json();
+app.use(express.json());
 
 mongoose.connect(KEYS.mongoURI);
 

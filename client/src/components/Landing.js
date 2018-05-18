@@ -38,10 +38,12 @@ export default class Landing extends Component {
   makePersonCard(person) {
     // Inline styling variable
     const borderRadius = '5%';
+    const marginLeftLinkedIn = '-5%';
+    const marginLeftGitHub = '-2.5%';
 
     // Handle optional fields
     const location = (person.city ? (person.city + ', ') : '') + (person.state ? person.state : '');
-    const linkedin = (<a href={person.linkedin} target="_blank" className="btn btn-primary" style={{ borderRadius, 'marginBotton': 5 }}>{person.linkedin ? 'Check Out My LinkedIn' : ''}</a>);
+    const linkedin = (<a href={person.linkedin} target="_blank" className="btn btn-primary" style={{ borderRadius, 'marginBottom': 10, 'marginLeft': marginLeftLinkedIn }}>{person.linkedin ? 'Check Out My LinkedIn' : ''}</a>);
 
     return (
       <div key={person.id} className="card" style={{ 'width': '18rem', borderRadius }}>
@@ -50,7 +52,7 @@ export default class Landing extends Component {
           <h5 className="card-title">{person.username}</h5>
           <p className="card-text">{location ? location : ''}</p>
           {person.linkedin ? linkedin : ''}
-          <a href={person.githubURL} target="_blank" className="btn btn-success" style={{ borderRadius }}>Check Out My Github</a>
+          <a href={person.githubURL} target="_blank" className="btn btn-success" style={{ borderRadius, 'marginLeft': marginLeftGitHub }}>Check Out My Github</a>
         </div>
       </div>
     );

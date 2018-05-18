@@ -35,10 +35,14 @@ module.exports = (app) => {
       }
     }
 
+    console.log('\nvalues:\n' + JSON.stringify(values, undefined, 2));
+
     const updatedUser = await User.findOneAndUpdate({ '_id': user.id }, { '$set': values }, { 'new': true })
       .catch((e) => {
         res.json({ 'error': `Could not update user with id ${user.id}` });
       });
+
+    console.log('\nupdatedUser:\n' + JSON.stringify(updatedUser, undefined, 2));
 
     if ((updatedUser !== undefined) && (updatedUser !== null)) {
       res.user = updatedUser;

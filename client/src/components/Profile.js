@@ -35,7 +35,7 @@ export default class Profile extends Component {
     // update input fields to user's current values, if they exist
 
     if (this.state.user.linkedin) {
-      document.getElementById('linkedInURL').value = this.state.user.linkedIn;
+      document.getElementById('linkedInURL').value = this.state.user.linkedin;
     }
 
     if (this.state.user.state) {
@@ -50,7 +50,7 @@ export default class Profile extends Component {
   addLinkedIn() {
     const URL = document.getElementById('linkedInURL').value;
 
-    this.setState({ 'linkedInURL': URL });
+    this.setState({ 'linkedIn': URL });
   }
 
   addState() {

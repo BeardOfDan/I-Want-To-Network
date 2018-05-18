@@ -9,6 +9,9 @@ export default class Profile extends Component {
     this.state = {
       'action': null,
       'user': null,
+
+      // the below properties are filled in by the input fields and used to update the user object in the database
+
       'linkedIn': null,
       'state': null,
       'city': null
@@ -25,8 +28,23 @@ export default class Profile extends Component {
         return null; // there's an error, so don't show the auth buttons in the header
       }));
 
+    console.log('user: ' + JSON.stringify(user, undefined, 2));
     this.setState({ 'user': (user ? user : false) });
-  }
+
+    // update fields to user's current values, IF they exist
+
+    if (this.state.user.linkedin) {
+      document.getElementById('linkedInURL').value = this.state.user.linkedIn;
+    }
+
+    if (this.state.user.state) {
+      document.getElementById('state').value = this.state.user.state;
+
+      if (this.state.user.city) {
+        document.getElementById('city').value = this.state.user.city;
+      }
+    }
+  } // end of componentDidMount
 
   addLinkedIn() {
     const URL = document.getElementById('linkedInURL').value;

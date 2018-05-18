@@ -124,7 +124,7 @@ export default class Landing extends Component {
           );
         }
         break;
-        
+
       default: // do nothing until it's known if the user is logged in or not
     }
   }

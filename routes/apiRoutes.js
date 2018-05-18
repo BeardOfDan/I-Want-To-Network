@@ -33,7 +33,7 @@ module.exports = (app) => {
       }
     }
 
-    const updatedUser = await User.findOneAndUpdate({ '_id': user.id }, { '$set': values })
+    const updatedUser = await User.findOneAndUpdate({ '_id': user.id }, { '$set': values }, { 'new': true })
       .catch((e) => {
         res.json({ 'error': `Could not update user with id ${user.id}` });
       });

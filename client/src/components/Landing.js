@@ -76,16 +76,12 @@ export default class Landing extends Component {
     const colSize = ~~(12 / this.rowLength);
     const colClass = `col-md-${colSize}`;
 
-    console.log(row[0]);
-    console.log(new Date());
-
     return (
       <div className="row" key={index}>
         {
           row.map((card, index) => {
             return (
               <div className={colClass} key={index}>
-                {/* {this.makePersonCard(this.state.others[0])} */}
                 {card}
               </div>
             );
@@ -117,7 +113,7 @@ export default class Landing extends Component {
         }
 
         if (this.state.others.length < 1) {
-          return (<p>Here is a listing of people</p>);
+          // Do nothing, until the state has loaded the list of people
         } else {
           return (
             <div>
@@ -125,15 +121,10 @@ export default class Landing extends Component {
                 return this.cardRow(peopleRow, index);
               })}
             </div>
-            // <div>
-            //   {this.state.others.map((person, index) => {
-
-            //     return this.makePersonCard(person);
-            //   })}
-            // </div>
           );
         }
-
+        break;
+        
       default: // do nothing until it's known if the user is logged in or not
     }
   }

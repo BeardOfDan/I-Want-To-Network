@@ -76,7 +76,7 @@ export default class Landing extends Component {
 
   cardRow(row, index) { // turn the row into a bootstrap row of this.rowLength (3)
     const colSize = ~~(12 / this.rowLength);
-    const colClass = `col-md-${colSize}`;
+    const colClass = `col-sm-${colSize}`;
 
     return (
       <div className="row" key={index}>

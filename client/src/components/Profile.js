@@ -84,17 +84,18 @@ export default class Profile extends Component {
       values.linkedIn = this.state.linkedIn;
     }
 
-    console.log('populated values\n' + JSON.stringify(values, undefined, 2));
-
     axios.post('/api/updateProfile', values)
       .then((res) => {
-        console.log('inside .then');
-
-        // evaluate res.data
         const newAction = (res.data.error === undefined) ? 'success' : 'error';
         this.setState({ 'action': newAction, 'updatedValues': res.data.updatedUser });
 
-        console.log('success!');
+        // Update local React copy of user
+        const updatedUser = this.state.user;
+        for (let key in values) {
+          updatedUser[key] = values[key];
+        }
+
+        this.setState({ 'user': updatedUser });
       })
       .catch((e) => {
         this.setState({ 'action': 'error' });

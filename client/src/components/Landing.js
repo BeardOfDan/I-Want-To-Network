@@ -9,6 +9,9 @@ export default class Landing extends Component {
       'isLoggedIn': null,
       'others': []
     };
+
+    // Note: this variable cannot be greater than 12, otherwise the cardRow function will produce an error
+    this.rowLength = 3; // the number of cards per row
   }
 
   async componentDidMount() {
@@ -53,6 +56,44 @@ export default class Landing extends Component {
     );
   }
 
+  cardRows() { // turns an array of cards into an array of arrays with length of 3
+    const people = this.state.others;
+    const rows = [];
+
+    for (let i = 0; i < people.length; i += this.rowLength) {
+      const rowIndex = i / this.rowLength;
+      rows[rowIndex] = [];
+
+      for (let j = 0; j < (this.rowLength - 1); j++) {
+        rows[rowIndex][j] = this.makePersonCard(people[rowIndex + j]);
+      }
+    }
+
+    return rows;
+  }
+
+  cardRow(row, index) { // turn the row into a bootstrap row of this.rowLength (3)
+    const colSize = ~~(12 / this.rowLength);
+    const colClass = `col-md-${colSize}`;
+
+    return (
+      <div className="row" key={index}>
+        {
+          row.map((card, index) => {
+            return (
+              <div className={colClass} key={index}>
+                {this.makePersonCard(this.state.others[0])}
+                {/* {card[index]} */}
+                {/* {console.log(JSON.stringify(card[index], undefined, 2))} */}
+                {/* {console.log(new Date())} */}
+              </div>
+            );
+          })
+        }
+      </div>
+    );
+  }
+
   pageContent() {
     switch (this.state.isLoggedIn) { // handle authentication status
       case false:
@@ -66,20 +107,29 @@ export default class Landing extends Component {
         );
 
       case true:
-        axios.get('/api/people')
-          .then((response) => {
-            this.setState({ 'others': response.data });
-          });
+        // The folowing if statement prevents an infinite loop of updating the state / re-rendering this component
+        if (this.state.others.length < 1) {
+          axios.get('/api/people')
+            .then((response) => {
+              this.setState({ 'others': response.data });
+            });
+        }
 
         if (this.state.others.length < 1) {
           return (<p>Here is a listing of people</p>);
         } else {
           return (
             <div>
-              {this.state.others.map((person, index) => {
-                return this.makePersonCard(person);
+              {this.cardRows().map((peopleRow, index) => {
+                return this.cardRow(peopleRow, index);
               })}
             </div>
+            // <div>
+            //   {this.state.others.map((person, index) => {
+
+            //     return this.makePersonCard(person);
+            //   })}
+            // </div>
           );
         }
 

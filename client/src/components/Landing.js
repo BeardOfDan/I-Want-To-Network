@@ -11,7 +11,7 @@ export default class Landing extends Component {
     };
 
     // Note: this variable cannot be greater than 12, otherwise the cardRow function will produce an error
-    this.rowLength = 3; // the number of cards per row
+    this.rowLength = 4; // the number of cards per row
   }
 
   async componentDidMount() {
@@ -64,7 +64,7 @@ export default class Landing extends Component {
       const rowIndex = i / this.rowLength;
       rows[rowIndex] = [];
 
-      for (let j = 0; j < (this.rowLength - 1); j++) {
+      for (let j = 0; (j < this.rowLength) && ((rowIndex + j < people.length)); j++) {
         rows[rowIndex][j] = this.makePersonCard(people[rowIndex + j]);
       }
     }
@@ -76,16 +76,17 @@ export default class Landing extends Component {
     const colSize = ~~(12 / this.rowLength);
     const colClass = `col-md-${colSize}`;
 
+    console.log(row[0]);
+    console.log(new Date());
+
     return (
       <div className="row" key={index}>
         {
           row.map((card, index) => {
             return (
               <div className={colClass} key={index}>
-                {this.makePersonCard(this.state.others[0])}
-                {/* {card[index]} */}
-                {/* {console.log(JSON.stringify(card[index], undefined, 2))} */}
-                {/* {console.log(new Date())} */}
+                {/* {this.makePersonCard(this.state.others[0])} */}
+                {card}
               </div>
             );
           })

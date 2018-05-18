@@ -7,8 +7,9 @@ export default class Profile extends Component {
     super(props);
 
     this.state = {
-      'action': null,
+      'action': null, // null, 'pending', 'success', or 'error'
       'user': null,
+      'updatedValues': null, // this is returned from the api after the update occurs
 
       // the below properties are filled in by the input fields and used to update the user object in the database
 
@@ -31,7 +32,7 @@ export default class Profile extends Component {
     console.log('user: ' + JSON.stringify(user, undefined, 2));
     this.setState({ 'user': (user ? user : false) });
 
-    // update fields to user's current values, IF they exist
+    // update input fields to user's current values, if they exist
 
     if (this.state.user.linkedin) {
       document.getElementById('linkedInURL').value = this.state.user.linkedIn;
@@ -67,10 +68,7 @@ export default class Profile extends Component {
   handleSubmission(e) {
     e.preventDefault();
 
-    console.log('\nThe state:');
-    console.log(JSON.stringify(this.state, undefined, 2) + '\n');
-
-    // Evaluate the state variables
+    this.setState({ 'action': 'pending' });
 
     const values = {};
 
@@ -86,39 +84,52 @@ export default class Profile extends Component {
       values.linkedIn = this.state.linkedIn;
     }
 
-    // send axios.post request to server
-
-    // temp change pageContent to an 'updating user data...' message
-
-    // receive response to request
-
-    // if valid, make success screen
-    // also put big button to prompt the user to return to the home page or something
-
-    // else, present error message, prompt the user to try again later
+    axios.post('/api/updateProfile', values)
+      .then((res) => {
+        // evaluate res.data
+        const newAction = (res.data.error === undefined) ? 'success' : 'error';
+        this.setState({ 'action': newAction, 'updatedValues': res.data.updatedUser });
+      })
+      .catch((e) => {
+        this.setState({ 'action': 'error' });
+        console.log('\n\nError!\n' + e); // TODO: Add logging or something to note this event
+      });
   }
 
   pageContent() {
     switch (this.state.action) {
+      // TODO: Add nice styling + possibly add an animation of some kind (at least for pending)
+
       case 'pending':
         return (
           <div>
-            <h3>Updating your profile...</h3>
+            <h4>Updating your profile...</h4>
           </div>
         );
 
       case 'success':
-        break;
+        // TODO: Put big button to prompt the user to return to the home page or something
+        return (
+          <div>
+            <h4>You have successfully update your profile information!</h4>
+            {/* TODO: use this.state.updatedValues to display what the new values are */}
+          </div>
+        );
 
       case 'error':
-        break;
+        // TODO: Add logging or other notification system
+        return (
+          <div>
+            <h3>There was an error in updating your profile! Please try again later</h3>
+          </div>
+        );
 
       case null:
         // do nothing, let the next switch handle it
         break;
 
       default:
-        console.log(`Error! Attempted to change profile, but state.action had an invalid value! state.action="${JSON.stringify(this.state.action, undefined, 2)}"`);
+        console.log(`Error! Attempted to change profile, but state.action had an invalid value! state.action=${JSON.stringify(this.state.action, undefined, 2)}`);
     }
 
     switch (this.state.user) { // handle authentication status
@@ -158,7 +169,8 @@ export default class Profile extends Component {
               </FormGroup>
               <input type="submit" />
 
-              {/* br tags for formatting */}
+              {/* br tags for formatting (I hate when there is no padding at the bottom of the page)*/}
+              {/* TODO: Refactor from br tags to css padding-bottom */}
               <br />
               <br />
               <br />

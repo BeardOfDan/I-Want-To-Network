@@ -13,16 +13,12 @@ export default class App extends Component {
     super(props);
 
     this.state = {
-      'user': undefined
+      'user': null
     };
   }
 
   componentDidMount() {
     LoggedIn(this.setState.bind(this));
-  }
-
-  setStateAuth(user) {
-    this.setState({ user });
   }
 
   render() {

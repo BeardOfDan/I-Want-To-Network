@@ -6,7 +6,7 @@ export default class Landing extends Component {
     super(props);
 
     this.state = {
-      'isLoggedIn': null,
+      'isLoggedIn': this.props.user ? true : false,
       'others': []
     };
 
@@ -14,26 +14,26 @@ export default class Landing extends Component {
     this.rowLength = 4; // the number of cards per row
   }
 
-  async componentDidMount() {
-    const user = (await axios.get('/auth/currentUser')
-      .then((response) => {
-        return response.data;
-      })
-      .catch((e) => {
-        console.log('error: ' + e);
-        return null; // there's an error, so don't show the auth buttons in the header
-      }));
+  // async componentDidMount() {
+  //   const user = (await axios.get('/auth/currentUser')
+  //     .then((response) => {
+  //       return response.data;
+  //     })
+  //     .catch((e) => {
+  //       console.log('error: ' + e);
+  //       return null; // there's an error, so don't show the auth buttons in the header
+  //     }));
 
-    if (!user) {
-      return this.setState({
-        'isLoggedIn': false
-      });
-    }
+  //   if (!user) {
+  //     return this.setState({
+  //       'isLoggedIn': false
+  //     });
+  //   }
 
-    this.setState({
-      'isLoggedIn': true
-    });
-  }
+  //   this.setState({
+  //     'isLoggedIn': true
+  //   });
+  // }
 
   makePersonCard(person) {
     // Inline styling variable

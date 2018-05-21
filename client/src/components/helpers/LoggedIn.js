@@ -12,5 +12,5 @@ export default async (setStateAuth) => {
       return null; // there's an error, so don't show the auth buttons in the header
     }));
 
-  setStateAuth(user);
+  setStateAuth({ user });
 };

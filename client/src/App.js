@@ -6,13 +6,31 @@ import Landing from './components/Landing';
 import Profile from './components/Profile';
 import NearMe from './components/NearMe.js';
 
+import LoggedIn from './components/helpers/LoggedIn.js';
+
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      'user': undefined
+    };
+  }
+
+  componentDidMount() {
+    LoggedIn(this.setState.bind(this));
+  }
+
+  setStateAuth(user) {
+    this.setState({ user });
+  }
+
   render() {
     return (
       <BrowserRouter>
         <div>
           <Header />
-          <Route exact path="/" component={Landing} />
+          <Route exact path="/" component={() => <Landing user={this.state.user} />} />
           <Route exact path="/profile" component={Profile} />
           <Route path="/nearMe/" component={NearMe} />
         </div>

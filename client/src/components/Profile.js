@@ -133,10 +133,7 @@ export default class Profile extends Component {
       case false: // The user is NOT logged in
         return <NotLoggedIn />;
 
-      case null: // do nothing until it's known if the user is logged in or not
-        break;
-
-      default: // The user is logged in
+      case true: // The user is logged in
         return (
           <Grid>
             <Form onSubmit={this.handleSubmission.bind(this)} >
@@ -169,6 +166,9 @@ export default class Profile extends Component {
             </Form>
           </Grid>
         );
+
+      default:
+      // do nothing until it's known if the user is logged in or not
     }
   }
 

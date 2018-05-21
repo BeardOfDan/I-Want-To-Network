@@ -1,24 +1,16 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
 
 export default class NearMe extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      'loggedIn': undefined,
+      'user': this.props.user,
+      'loggedIn': this.props.isLoggedIn,
       'criteria': 'state', // can be 'state', 'city' (meaning city, state), or distance (set number of miles)
       'matches': []
     };
   }
-
-  // TODO: Have state form be a static list of states (and countries), thereby negating this issue (and spelling error issues)
-  // // Case insensitive matching
-  // matchState(state) {
-  //   const states = {
-  //     'California': ['CA', 'California']
-  //   };
-  // }
 
   pageContent() {
     switch (this.state.loggedIn) {
@@ -37,16 +29,15 @@ export default class NearMe extends Component {
         );
 
       // do nothing until auth status is confirmed
-      default: // undefined
-        return (
-          <div>
-            Temp div to not throw error
-          </div>
-        );
+      default: // null
     }
   }
 
   render() {
-    return this.pageContent();
+    return (
+      <div style={this.props.renderStyles} >
+        {this.pageContent()}
+      </div>
+    );
   }
 };

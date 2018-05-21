@@ -8,6 +8,8 @@ import NearMe from './components/NearMe.js';
 
 import LoggedIn from './components/helpers/LoggedIn.js';
 
+const renderStyles = { 'padding': 25 }; // style for div that wraps render function content
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -27,9 +29,9 @@ export default class App extends Component {
       <BrowserRouter>
         <div>
           <Route path="" component={() => <Header isLoggedIn={this.state.isLoggedIn} />} />
-          <Route exact path="/" component={() => <Landing isLoggedIn={this.state.isLoggedIn} />} />
-          <Route exact path="/profile" component={() => <Profile user={this.state.user} isLoggedIn={this.state.isLoggedIn} />} />
-          <Route path="/nearMe" component={() => <NearMe isLoggedIn={this.state.isLoggedIn} />} />
+          <Route exact path="/" component={() => <Landing isLoggedIn={this.state.isLoggedIn} renderStyles={renderStyles} />} />
+          <Route exact path="/profile" component={() => <Profile user={this.state.user} isLoggedIn={this.state.isLoggedIn} renderStyles={renderStyles} />} />
+          <Route path="/nearMe" component={() => <NearMe isLoggedIn={this.state.isLoggedIn} user={this.state.user} renderStyles={renderStyles} />} />
         </div>
       </BrowserRouter>
     );

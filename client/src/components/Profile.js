@@ -174,7 +174,7 @@ export default class Profile extends Component {
 
   render() {
     return (
-      <div style={{ 'padding': 25 }}>
+      <div style={this.props.renderStyles} >
         {this.pageContent()}
       </div>
     );

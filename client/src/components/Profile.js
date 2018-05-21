@@ -10,9 +10,6 @@ export default class Profile extends Component {
       'action': null, // null, 'pending', 'success', or 'error'
       'user': null,
       'updatedValues': null, // this is returned from the api after the update occurs
-
-      // the below properties are filled in by the input fields and used to update the user object in the database
-
       'linkedIn': null,
       'state': null,
       'city': null

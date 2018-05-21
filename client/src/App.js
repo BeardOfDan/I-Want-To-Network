@@ -28,7 +28,7 @@ export default class App extends Component {
         <div>
           <Header />
           <Route exact path="/" component={() => <Landing isLoggedIn={this.state.isLoggedIn} />} />
-          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/profile" component={() => { return <Profile user={this.state.user} />; }} />
           <Route path="/nearMe/" component={NearMe} />
         </div>
       </BrowserRouter>

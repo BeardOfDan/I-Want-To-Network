@@ -22,7 +22,12 @@ export default class NearMe extends Component {
   }
 
   changeCriteriaType(criteriaType) {
-    this.setState({ criteriaType });
+    this.setState({ 'criteriaType': criteriaType.value });
+  }
+
+  addCriteriaValue() {
+    const criteriaValue = document.getElementById('criteriaValue').value;
+    this.setState({ 'criteriaValue': criteriaValue.value });
   }
 
   handleSubmission(e) {
@@ -50,17 +55,21 @@ export default class NearMe extends Component {
               <br />
               <FormGroup>
                 <label>Criteria Type</label>
-                <Select name="criteriaType" value={this.state.criteriaType} onChange={this.changeCriteriaType.bind(this)}
+                <Select name="criteriaType" value={this.state.criteriaType}
+                  onChange={this.changeCriteriaType.bind(this)}
                   options={[
                     { 'value': 'state', 'label': 'state' },
                     { 'value': 'city', 'label': 'city' },
                     { 'value': 'distance', 'label': 'distance' }
                   ]} />
               </FormGroup>
-              {/* <FormGroup inline="true">
-                <label>State:</label>
-                <input id="state" type="text" placeholder="State" onKeyPress={this.addState.bind(this)} />
-              </FormGroup> */}
+              {this.state.criteriaType === 'distance' &&
+                <FormGroup>
+                  <label>Distance (miles)</label>
+                  <input id="criteriaValue" type="number"
+                    onChange={this.addCriteriaValue.bind(this)} />
+                </FormGroup>
+              }
             </Form>
           </Grid>
         );

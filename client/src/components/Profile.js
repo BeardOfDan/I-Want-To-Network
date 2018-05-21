@@ -8,7 +8,7 @@ export default class Profile extends Component {
 
     this.state = {
       'action': null, // null, 'pending', 'success', or 'error'
-      'user': null,
+      'user': this.props.user,
       'updatedValues': null, // this is returned from the api after the update occurs
       'linkedIn': null,
       'state': null,
@@ -16,20 +16,10 @@ export default class Profile extends Component {
     };
   }
 
-  async componentDidMount() {
-    const user = (await axios.get('/auth/currentUser')
-      .then((response) => {
-        return response.data;
-      })
-      .catch((e) => {
-        console.log('error: ' + e);
-        return null; // there's an error, so don't show the auth buttons in the header
-      }));
-
-    console.log('user: ' + JSON.stringify(user, undefined, 2));
-    this.setState({ 'user': (user ? user : false) });
-
-    // update input fields to user's current values, if they exist
+  componentDidMount() { // update input fields to user's current values, if they exist
+    if (!this.state.user) {
+      return;
+    }
 
     if (this.state.user.linkedin) {
       document.getElementById('linkedInURL').value = this.state.user.linkedin;
@@ -42,7 +32,7 @@ export default class Profile extends Component {
         document.getElementById('city').value = this.state.user.city;
       }
     }
-  } // end of componentDidMount
+  }
 
   addLinkedIn() {
     const URL = document.getElementById('linkedInURL').value;

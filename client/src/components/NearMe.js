@@ -15,19 +15,19 @@ export default class NearMe extends Component {
     this.state = {
       'user': this.props.user,
       'loggedIn': this.props.isLoggedIn,
-      'criteriaType': 'state', // can be 'state', 'city' (meaning city, state), or distance (set number of miles)
-      'criteriaValue': null,
+      'criteria': 'state', // can be 'state', 'city' (meaning city, state), or distance (set number of miles)
+      'distance': 0,
       'matches': []
     };
   }
 
-  changeCriteriaType(criteriaType) {
-    this.setState({ 'criteriaType': criteriaType.value });
+  changeCriteria(criteria) {
+    this.setState({ 'criteria': criteria.value });
   }
 
-  addCriteriaValue() {
-    const criteriaValue = document.getElementById('criteriaValue').value;
-    this.setState({ 'criteriaValue': criteriaValue.value });
+  changeDistance() {
+    const distance = document.getElementById('distance').value;
+    this.setState({ 'distance': distance.value });
   }
 
   handleSubmission(e) {
@@ -35,8 +35,12 @@ export default class NearMe extends Component {
 
     const values = {};
 
-    if (this.state.criteriaType) {
-      values.criteriaType = this.state.criteriaType;
+    if (this.state.criteria) {
+      values.criteria = this.state.criteria;
+
+      if (this.state.criteria === 'distance') {
+        values.distance = this.state.distance;
+      }
     }
 
 
@@ -55,19 +59,32 @@ export default class NearMe extends Component {
               <br />
               <FormGroup>
                 <label>Criteria Type</label>
-                <Select name="criteriaType" value={this.state.criteriaType}
-                  onChange={this.changeCriteriaType.bind(this)}
+                <Select name="criteria" value={this.state.criteria}
+                  onChange={this.changeCriteria.bind(this)}
                   options={[
                     { 'value': 'state', 'label': 'state' },
                     { 'value': 'city', 'label': 'city' },
                     { 'value': 'distance', 'label': 'distance' }
                   ]} />
               </FormGroup>
-              {this.state.criteriaType === 'distance' &&
+              {
+                this.state.criteria === 'state' &&
                 <FormGroup>
-                  <label>Distance (miles)</label>
-                  <input id="criteriaValue" type="number"
-                    onChange={this.addCriteriaValue.bind(this)} />
+                  <p>{this.state.user.state}</p>
+                </FormGroup>
+              }
+              {
+                this.state.criteria === 'city' &&
+                <FormGroup>
+                  <p>{this.state.user.city}, {this.state.user.state}</p>
+                </FormGroup>
+              }
+              {
+                this.state.criteria === 'distance' &&
+                <FormGroup>
+                  <label>Distance (miles) from {this.state.user.city}, {this.state.user.state}</label>
+                  <input id="distance" type="number" value={this.state.distance} min={0}
+                    onChange={this.changeDistance.bind(this)} />
                 </FormGroup>
               }
             </Form>

@@ -13,7 +13,8 @@ export default class App extends Component {
     super(props);
 
     this.state = {
-      'user': null
+      'user': null,
+      'isLoggedIn': null
     };
   }
 
@@ -26,7 +27,7 @@ export default class App extends Component {
       <BrowserRouter>
         <div>
           <Header />
-          <Route exact path="/" component={() => <Landing user={this.state.user} />} />
+          <Route exact path="/" component={() => <Landing isLoggedIn={this.state.isLoggedIn} />} />
           <Route exact path="/profile" component={Profile} />
           <Route path="/nearMe/" component={NearMe} />
         </div>

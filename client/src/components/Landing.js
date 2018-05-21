@@ -6,11 +6,12 @@ export default class Landing extends Component {
     super(props);
 
     this.state = {
-      'isLoggedIn': this.props.user ? true : false,
+      'isLoggedIn': this.props.isLoggedIn,
       'others': []
     };
 
-    // Note: this variable cannot be greater than 12, otherwise the cardRow function will produce an error
+    // Note: This variable cannot be greater than 12, otherwise the cardRow function will produce an error
+    //         as this variable is used to determine the size of the bootstrap column
     this.rowLength = 4; // the number of cards per row
   }
 

@@ -1,41 +1,29 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 export default class Header extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      'loggedIn': null
+      'isLoggedIn': this.props.isLoggedIn
     }
   }
 
-  async componentDidMount() {
-    const user = (await axios.get('/auth/currentUser')
-      .then((response) => {
-        return response.data;
-      })
-      .catch((e) => {
-        console.log('error: ' + e);
-        return null; // there's an error, so don't show the auth buttons in the header
-      }));
-
-    this.setState({
-      'loggedIn': user ? true : false
-    });
-  }
-
   renderLogAction() { // Log in or out
-    switch (this.state.loggedIn) {
+    switch (this.state.isLoggedIn) {
       case false: // not logged in
         return (
           <li key="0"><a href="/auth/github">Login With Github</a></li>
         );
+
       case true:
         return [ // simple hardcoded array, so simple hardcoded keys
-          <li key="0"><Link to="/profile">Profile</Link></li>,
-          <li key="1"><a href="/auth/logout">Logout</a></li>
+          <li key="0"><Link to="/nearMe">Near Me</Link></li>,
+          <li key="1"><Link to="/profile">Profile</Link></li>,
+          <li key="2"><a href="/auth/logout">Logout</a></li>
         ];
+
       default: // pending
         return undefined;
     }

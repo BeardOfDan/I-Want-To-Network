@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import NotLoggedIn from './helpers/notLoggedIn.js';
+
 export default class Landing extends Component {
   constructor(props) {
     super(props);
@@ -76,14 +78,7 @@ export default class Landing extends Component {
   pageContent() {
     switch (this.state.isLoggedIn) { // handle authentication status
       case false:
-        return (
-          <div>
-            <p>This is a basic app to help us network</p>
-            <hr />
-            <p>First, sign in with GitHub by clicking the button in the upper right</p>
-            <p>Then you can see who else is here, their email addresses and links to their githubs</p>
-          </div>
-        );
+        return <NotLoggedIn />;
 
       case true:
         // The folowing if statement prevents an infinite loop of updating the state / re-rendering this component

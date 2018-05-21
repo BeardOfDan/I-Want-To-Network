@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Grid, Form, FormGroup } from 'react-bootstrap';
 import axios from 'axios';
 
+import NotLoggedIn from './helpers/notLoggedIn.js';
+
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -9,6 +11,7 @@ export default class Profile extends Component {
     this.state = {
       'action': null, // null, 'pending', 'success', or 'error'
       'user': this.props.user,
+      'isLoggedIn': this.props.isLoggedIn,
       'updatedValues': null, // this is returned from the api after the update occurs
       'linkedIn': null,
       'state': null,
@@ -126,16 +129,9 @@ export default class Profile extends Component {
         console.log(`Error! Attempted to change profile, but state.action had an invalid value! state.action=${JSON.stringify(this.state.action, undefined, 2)}`);
     }
 
-    switch (this.state.user) { // handle authentication status
+    switch (this.state.isLoggedIn) { // handle authentication status
       case false: // The user is NOT logged in
-        return (
-          <div>
-            <p>This is a basic app to help us network</p>
-            <hr />
-            <p>First, sign in with GitHub by clicking the button in the upper right</p>
-            <p>Then you can see who else is here, their email addresses and links to their githubs</p>
-          </div>
-        );
+        return <NotLoggedIn />;
 
       case null: // do nothing until it's known if the user is logged in or not
         break;
@@ -178,7 +174,7 @@ export default class Profile extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ 'padding': 25 }}>
         {this.pageContent()}
       </div>
     );

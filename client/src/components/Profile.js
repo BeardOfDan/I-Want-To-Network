@@ -2,7 +2,16 @@ import React, { Component } from 'react';
 import { Grid, Form, FormGroup } from 'react-bootstrap';
 import axios from 'axios';
 
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+
 import NotLoggedIn from './helpers/notLoggedIn.js';
+
+import FormStyles from './styles/formStyles.js';
+
+import stateFieldValues from './utility/stateOptions.js';
+
+const { StateOptions } = stateFieldValues;
 
 export default class Profile extends Component {
   constructor(props) {
@@ -24,17 +33,21 @@ export default class Profile extends Component {
       return;
     }
 
+    const values = {};
+
     if (this.state.user.linkedin) {
-      document.getElementById('linkedInURL').value = this.state.user.linkedin;
+      values.linkedIn = this.state.user.linkedin;
     }
 
     if (this.state.user.state) {
-      document.getElementById('state').value = this.state.user.state;
+      values.state = this.state.user.state;
 
       if (this.state.user.city) {
-        document.getElementById('city').value = this.state.user.city;
+        values.city = this.state.user.city;
       }
     }
+
+    this.setState(values);
   }
 
   addLinkedIn() {
@@ -43,10 +56,8 @@ export default class Profile extends Component {
     this.setState({ 'linkedIn': URL });
   }
 
-  addState() {
-    const state = document.getElementById('state').value;
-
-    this.setState({ state });
+  addState(state) {
+    this.setState({ 'state': state.value });
   }
 
   addCity() {
@@ -136,7 +147,7 @@ export default class Profile extends Component {
       case true: // The user is logged in
         return (
           <Grid>
-            <Form onSubmit={this.handleSubmission.bind(this)} >
+            <Form style={FormStyles} onSubmit={this.handleSubmission.bind(this)} >
               <br />
               <FormGroup>
                 <h5>Add more personal info:</h5>
@@ -144,15 +155,19 @@ export default class Profile extends Component {
               <br />
               <FormGroup>
                 <label>LinkedIn URL</label>
-                <input type="text" id="linkedInURL" autoFocus onChange={this.addLinkedIn.bind(this)} placeholder="LinkedIn URL" />
+                <input type="text" value={this.state.linkedIn} id="linkedInURL" autoFocus onChange={this.addLinkedIn.bind(this)} placeholder="LinkedIn URL" />
               </FormGroup>
               <FormGroup inline="true">
                 <label>State:</label>
-                <input id="state" type="text" placeholder="State" onKeyPress={this.addState.bind(this)} />
+                {/* <input id="state" type="text" placeholder="State" onKeyPress={this.addState.bind(this)} /> */}
+                {console.log('state: ' + this.state.state)}
+                <Select name="state" value={this.state.state}
+                  onChange={this.addState.bind(this)}
+                  options={StateOptions} />
               </FormGroup>
               <FormGroup inline="true">
                 <label>City:</label>
-                <input id="city" type="text" placeholder="City" onKeyPress={this.addCity.bind(this)} />
+                <input id="city" value={this.state.city} type="text" placeholder="City" onKeyPress={this.addCity.bind(this)} />
               </FormGroup>
               <input type="submit" />
 

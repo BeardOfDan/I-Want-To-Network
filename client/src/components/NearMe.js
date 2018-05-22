@@ -7,6 +7,7 @@ import 'react-select/dist/react-select.css';
 import axios from 'axios';
 
 import NotLoggedIn from './helpers/notLoggedIn.js';
+import makePeopleCards from './helpers/makePeopleCards.js';
 
 export default class NearMe extends Component {
   constructor(props) {
@@ -78,10 +79,10 @@ export default class NearMe extends Component {
   }
 
   displayMatches() {
-    const {criteria, matches} = this.state;
+    const { criteria, matches } = this.state;
 
     if (matches[criteria].length > 0) {
-      return JSON.stringify(matches[criteria], undefined, 2);
+      return makePeopleCards(matches[criteria]);
     }
   }
 
@@ -145,6 +146,14 @@ export default class NearMe extends Component {
     return (
       <div style={this.props.renderStyles} >
         {this.pageContent()}
+        {
+          (this.state.matches[this.state.criteria].length > 0) &&
+          <div>
+            <br />
+            <hr />
+            <br />
+          </div>
+        }
         {this.displayMatches()}
       </div>
     );

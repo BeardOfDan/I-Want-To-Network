@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import NotLoggedIn from './helpers/notLoggedIn.js';
+import makePeopleCards from './helpers/makePeopleCards.js';
 
 export default class Landing extends Component {
   constructor(props) {
@@ -92,13 +93,7 @@ export default class Landing extends Component {
         if (this.state.others.length < 1) {
           // Do nothing, until the state has loaded the list of people
         } else {
-          return (
-            <div>
-              {this.cardRows().map((peopleRow, index) => {
-                return this.cardRow(peopleRow, index);
-              })}
-            </div>
-          );
+          return makePeopleCards(this.state.others);
         }
         break;
 

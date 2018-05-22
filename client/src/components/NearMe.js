@@ -4,7 +4,7 @@ import { Grid, Form, FormGroup } from 'react-bootstrap';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
-// import axios from 'axios';
+import axios from 'axios';
 
 import NotLoggedIn from './helpers/notLoggedIn.js';
 
@@ -15,9 +15,9 @@ export default class NearMe extends Component {
     this.state = {
       'user': this.props.user,
       'loggedIn': this.props.isLoggedIn,
-      'criteria': 'state', // can be 'state', 'city' (meaning city, state), or distance (set number of miles)
+      'criteria': 'state', // can be 'state', 'city' (meaning city, state), or distance (in miles)
       'distance': 0,
-      'matches': []
+      'matches': { 'state': [], 'city': [], 'distance': [] }
     };
   }
 
@@ -30,6 +30,23 @@ export default class NearMe extends Component {
     this.setState({ 'distance': distance.value });
   }
 
+  getCriteriaPath(criteria) {
+    switch (criteria) {
+      case 'state':
+        return `/api/userCountFiltered/${this.state.user.state}/`;
+
+      case 'city':
+        return `/api/userCountFiltered/${this.state.user.state}/`;
+      // return `/api/userCountFiltered/${this.state.user.state}/${this.state.user.city}/`;
+
+      case 'distance':
+        return 'qwertyuiop';
+
+      default:
+        return 'eruihdnsfiuck3lrehdsjgfiuerodsajlkf';
+    }
+  }
+
   handleSubmission(e) {
     e.preventDefault();
 
@@ -37,12 +54,26 @@ export default class NearMe extends Component {
 
     if (this.state.criteria) {
       values.criteria = this.state.criteria;
+      values.state = this.state.user.state;
 
       if (this.state.criteria === 'distance') {
         values.distance = this.state.distance;
       }
+
+      if (this.state.criteria !== 'state') {
+        values.city = this.state.user.city;
+      }
     }
 
+    const path = this.getCriteriaPath(values.criteria);
+
+    axios.post(path, values)
+      .then((res) => {
+        console.log(JSON.stringify(res.data, undefined, 2));
+      })
+      .catch((e) => {
+        console.log('\n\nAxios Error!: ' + e + '\n\n');
+      });
 
   }
 
@@ -87,6 +118,9 @@ export default class NearMe extends Component {
                     onChange={this.changeDistance.bind(this)} />
                 </FormGroup>
               }
+
+              <br />
+              <input type="submit" value="Search" />
             </Form>
           </Grid>
         );

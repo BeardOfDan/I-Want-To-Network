@@ -3,7 +3,23 @@ const requireLogin = require('./../middleware/requireLogIn');
 const mongoose = require('mongoose');
 const User = mongoose.model('user');
 
-const _ = require('lodash');
+const getMatchingUsers = async (criteria, user) => {
+  const { state, city } = user;
+
+  switch (criteria) {
+    case 'state':
+      return await User.find({ state });
+
+    case 'city':
+      return await User.find({ state, city });
+
+    case 'distance':
+
+      break;
+
+    default:
+  }
+};
 
 module.exports = (app) => {
   app.post('/api/newUser', (req, res, next) => {
@@ -35,14 +51,10 @@ module.exports = (app) => {
       }
     }
 
-    console.log('\nvalues:\n' + JSON.stringify(values, undefined, 2));
-
     const updatedUser = await User.findOneAndUpdate({ '_id': user.id }, { '$set': values }, { 'new': true })
       .catch((e) => {
         res.json({ 'error': `Could not update user with id ${user.id}` });
       });
-
-    console.log('\nupdatedUser:\n' + JSON.stringify(updatedUser, undefined, 2));
 
     if ((updatedUser !== undefined) && (updatedUser !== null)) {
       res.user = updatedUser;
@@ -61,14 +73,16 @@ module.exports = (app) => {
     res.json(userCount);
   });
 
-  app.get('/api/userCountFiltered/:state', requireLogin, async (req, res, next) => {
+  app.post('/api/userCountFiltered/:state', requireLogin, async (req, res, next) => {
     const { state } = req.params;
-    const city = req.query.city;
+    const { criteria, city, distance } = req.body;
 
-    const userCount = city ? (await User.find({ state, city })).length : (await User.find({ state })).length;
+    const matches = await getMatchingUsers(criteria, req.user);
+
+    const userCount = matches.length;
     const location = city ? `${city}, ${state}` : state;
 
-    return res.json({ userCount, location });
+    return res.json({ matches, userCount, location });
   });
 
 };

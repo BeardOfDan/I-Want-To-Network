@@ -9,6 +9,8 @@ import axios from 'axios';
 import NotLoggedIn from './helpers/notLoggedIn.js';
 import makePeopleCards from './helpers/makePeopleCards.js';
 
+import FormStyles from './styles/formStyles.js';
+
 export default class NearMe extends Component {
   constructor(props) {
     super(props);
@@ -91,7 +93,7 @@ export default class NearMe extends Component {
       case true:
         return (
           <Grid>
-            <Form onSubmit={this.handleSubmission.bind(this)} >
+            <Form style={FormStyles} onSubmit={this.handleSubmission.bind(this)} >
               <br />
               <FormGroup>
                 <h5>Find people near you!</h5>

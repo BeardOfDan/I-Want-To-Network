@@ -16,7 +16,7 @@ export default class NearMe extends Component {
       'user': this.props.user,
       'loggedIn': this.props.isLoggedIn,
       'criteria': 'state', // can be 'state', 'city' (meaning city, state), or distance (in miles)
-      'distance': 0,
+      'distance': 0, // miles from user's city, state
       'matches': { 'state': [], 'city': [], 'distance': [] }
     };
   }
@@ -33,17 +33,14 @@ export default class NearMe extends Component {
   getCriteriaPath(criteria) {
     switch (criteria) {
       case 'state':
-        return `/api/userCountFiltered/${this.state.user.state}/`;
-
       case 'city':
         return `/api/userCountFiltered/${this.state.user.state}/`;
-      // return `/api/userCountFiltered/${this.state.user.state}/${this.state.user.city}/`;
 
       case 'distance':
         return 'qwertyuiop';
 
       default:
-        return 'eruihdnsfiuck3lrehdsjgfiuerodsajlkf';
+        console.log(`Error! Invalid Search Criteria: '${criteria}'`);
     }
   }
 
@@ -69,12 +66,23 @@ export default class NearMe extends Component {
 
     axios.post(path, values)
       .then((res) => {
-        console.log(JSON.stringify(res.data, undefined, 2));
+        const matches = this.state.matches;
+        matches[this.state.criteria] = res.data.matches;
+
+        this.setState({ matches });
       })
       .catch((e) => {
-        console.log('\n\nAxios Error!: ' + e + '\n\n');
+        console.log(`\n\nAxios Error!:  ${JSON.stringify(e, undefined, 2)} \n\n`);
       });
 
+  }
+
+  displayMatches() {
+    const {criteria, matches} = this.state;
+
+    if (matches[criteria].length > 0) {
+      return JSON.stringify(matches[criteria], undefined, 2);
+    }
   }
 
   pageContent() {
@@ -137,6 +145,7 @@ export default class NearMe extends Component {
     return (
       <div style={this.props.renderStyles} >
         {this.pageContent()}
+        {this.displayMatches()}
       </div>
     );
   }

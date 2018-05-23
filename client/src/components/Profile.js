@@ -57,7 +57,7 @@ export default class Profile extends Component {
   }
 
   addState(state) {
-    this.setState({ 'state': state.value });
+    this.setState({ 'state': (state !== null) ? state.value : '' });
   }
 
   addCity() {

@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-// TODO: ADD fields for if a person has a project they want help with and if they are willing to help with a project
-
 const userSchema = new Schema({
   'email': { 'type': String, 'required': true },
   'username': { 'type': String, 'required': true },
@@ -10,7 +8,32 @@ const userSchema = new Schema({
   'photoURL': String, // GitHub profile picture
   'linkedin': String, // OPTIONAL
   'city': String, // OPTIONAL
-  'state': String // OPTIONAL
+  'state': String, // OPTIONAL
+  'work': {
+    'company': String,
+    'title': String,
+    'location': {
+      'state': String,
+      'city': String
+    }
+  },
+  'education': {
+    'Udemy': [{
+      'url': String, 'title': String
+    }],
+    'Udacity': [String] // Nanodegree names
+    // No need to worry about irrelevant stuff like college
+  },
+  'project': {
+    'name': String,
+    'site': String, // Probably Github Repo
+    'skills': [ // Skills that the project needs
+      String // General, Back End, Front End, etc.
+    ],
+    'technologies': [String] // What the project does/will use
+    // Ex. ['MongoDB', 'Express', 'React', 'Node', 'AWS']
+  },
+  'available': { 'type': Boolean, 'default': false } // to work on a project
 });
 
 mongoose.model('user', userSchema);

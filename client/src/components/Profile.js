@@ -22,9 +22,9 @@ export default class Profile extends Component {
       'user': this.props.user,
       'isLoggedIn': this.props.isLoggedIn,
       'updatedValues': null, // this is returned from the api after the update occurs
-      'linkedIn': null,
-      'state': null,
-      'city': null
+      'linkedIn': '',
+      'state': '',
+      'city': ''
     };
   }
 
@@ -52,17 +52,15 @@ export default class Profile extends Component {
 
   addLinkedIn() {
     const URL = document.getElementById('linkedInURL').value;
-
     this.setState({ 'linkedIn': URL });
   }
 
-  addState(state) {
+  changeState(state) {
     this.setState({ 'state': (state !== null) ? state.value : '' });
   }
 
-  addCity() {
+  changeCity() {
     const city = document.getElementById('city').value;
-
     this.setState({ city });
   }
 
@@ -159,15 +157,14 @@ export default class Profile extends Component {
               </FormGroup>
               <FormGroup inline="true">
                 <label>State:</label>
-                {/* <input id="state" type="text" placeholder="State" onKeyPress={this.addState.bind(this)} /> */}
-                {console.log('state: ' + this.state.state)}
                 <Select name="state" value={this.state.state}
-                  onChange={this.addState.bind(this)}
+                  onChange={this.changeState.bind(this)}
                   options={StateOptions} />
               </FormGroup>
               <FormGroup inline="true">
                 <label>City:</label>
-                <input id="city" value={this.state.city} type="text" placeholder="City" onKeyPress={this.addCity.bind(this)} />
+                {/* <input id="city" value={this.state.city} type="text" placeholder="City" onKeyPress={this.changeCity.bind(this)} /> */}
+                <input id="city" value={this.state.city} type="text" placeholder="City" onChange={this.changeCity.bind(this)} />
               </FormGroup>
               <input type="submit" />
 

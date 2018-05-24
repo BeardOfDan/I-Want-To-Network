@@ -14,7 +14,7 @@ module.exports = (app) => {
   app.post('/api/updateProfile', requireLogin, async (req, res, next) => {
     const user = req.user;
 
-    const { linkedIn, state, city } = req.body;
+    const { linkedIn, state, city, available } = req.body;
     const values = {};
 
     if (typeof linkedIn === 'string') {
@@ -28,6 +28,10 @@ module.exports = (app) => {
       if (typeof city === 'string') {
         values.city = city.trim();
       }
+    }
+
+    if (typeof available === 'boolean') {
+      values.available = available;
     }
 
     const updatedUser = await User.findOneAndUpdate({ '_id': user.id }, { '$set': values }, { 'new': true })

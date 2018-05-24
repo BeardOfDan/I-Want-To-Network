@@ -24,7 +24,8 @@ export default class Profile extends Component {
       'updatedValues': null, // this is returned from the api after the update occurs
       'linkedIn': '',
       'state': '',
-      'city': ''
+      'city': '',
+      'available': false
     };
   }
 
@@ -47,6 +48,10 @@ export default class Profile extends Component {
       }
     }
 
+    if (this.state.user.available !== undefined) {
+      values.available = this.state.user.available;
+    }
+
     this.setState(values);
   }
 
@@ -62,6 +67,10 @@ export default class Profile extends Component {
   changeCity() {
     const city = document.getElementById('city').value.trim();
     this.setState({ city });
+  }
+
+  changeAvailability(available) {
+    this.setState({ 'available': available ? available.value : false });
   }
 
   handleSubmission(e) {
@@ -83,10 +92,18 @@ export default class Profile extends Component {
       values.linkedIn = this.state.linkedIn;
     }
 
+    if (this.state.available !== 'undefined') {
+      values.available = this.state.available;
+    }
+
     axios.post('/api/updateProfile', values)
       .then((res) => {
-        const newAction = res.data.error ? 'success' : 'error';
+        const newAction = (res.data.error === undefined) ? 'success' : 'error';
         this.setState({ 'action': newAction, 'updatedValues': res.data.updatedUser });
+
+        if (newAction === 'error') {
+          console.log('\n\naxios error: ' + JSON.stringify(res.data, undefined, 2));
+        }
 
         // Update local React copy of user
         const updatedUser = this.state.user;
@@ -103,6 +120,9 @@ export default class Profile extends Component {
   }
 
   pageContent() {
+
+    console.log('pageContent, action: ' + this.state.action);
+
     switch (this.state.action) {
       // TODO: Add nice styling + possibly add an animation of some kind (at least for pending)
 
@@ -166,6 +186,15 @@ export default class Profile extends Component {
                 {/* <input id="city" value={this.state.city} type="text" placeholder="City" onKeyPress={this.changeCity.bind(this)} /> */}
                 <input id="city" value={this.state.city} type="text" placeholder="City" onChange={this.changeCity.bind(this)} />
               </FormGroup>
+              <FormGroup>
+                <label>Available to work on a project:</label>
+                <Select name="available" value={this.state.available}
+                  onChange={this.changeAvailability.bind(this)}
+                  options={[
+                    { 'label': 'true', 'value': true },
+                    { 'label': 'false', 'value': false }
+                  ]} />
+              </FormGroup>
               <input type="submit" />
 
               {/* br tags for formatting (I hate when there is no padding at the bottom of the page)*/}
@@ -176,7 +205,7 @@ export default class Profile extends Component {
               <br />
               <br />
             </Form>
-          </Grid>
+          </Grid >
         );
 
       default:

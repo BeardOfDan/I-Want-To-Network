@@ -1,7 +1,7 @@
 {
   "name": "i-want-to-network",
   "version": "1.0.0",
-  "description": "A simple platform for people to network with",
+  "description": "A simple platform for developers to network with",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

@@ -26,7 +26,7 @@ export default class NearMe extends Component {
     this.state = {
       'user': this.props.user,
       'loggedIn': this.props.isLoggedIn,
-      'criteria': 'distance', // can be 'state', 'city' (meaning city, state), or distance (in miles)
+      'criteria': 'city', // can be 'state', 'city' (meaning city, state), or distance (in miles)
       'distance': 0, // miles from user's city, state
       'matches': { 'state': [], 'city': [], 'distance': [] }
     };

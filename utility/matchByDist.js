@@ -75,7 +75,7 @@ module.exports = {
   'filterByDist': async (user, people, dist) => {
     const userCoords = await getCoordinatesFromUserData(user);
 
-    if (userCoords.error !== undefined) {
+    if (userCoords.error) {
       console.log('userCoords Error!');
       return { 'error': 'Could not get user\'s coordinates' };
     }
@@ -83,7 +83,7 @@ module.exports = {
     const coordList = people.reduce((accumulator, person, index, collection) => {
       const value = getCoordinatesFromUserData(person);
 
-      if (value.error !== undefined) {
+      if (value.error) {
         console.log(`\n\nPeople[${index}] Error!`);
         console.log(`${JSON.stringify(collection[index])}\n\n`);
 
@@ -99,7 +99,7 @@ module.exports = {
     await Promise.all(coordList);
 
     return people.filter((user, index, collection) => {
-      if (coordList[index].error !== undefined) {
+      if (coordList[index].error) {
         return false;
       }
 

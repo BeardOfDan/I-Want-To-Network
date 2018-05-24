@@ -79,7 +79,7 @@ export default class NearMe extends Component {
       .then((res) => {
         const matches = this.state.matches;
 
-        if (res.data.error !== undefined) {
+        if (res.data.error) {
           errorUser.username = 'Error:';
           errorUser.state = res.data.error;
 

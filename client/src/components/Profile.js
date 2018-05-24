@@ -85,7 +85,7 @@ export default class Profile extends Component {
 
     axios.post('/api/updateProfile', values)
       .then((res) => {
-        const newAction = (res.data.error === undefined) ? 'success' : 'error';
+        const newAction = res.data.error ? 'success' : 'error';
         this.setState({ 'action': newAction, 'updatedValues': res.data.updatedUser });
 
         // Update local React copy of user

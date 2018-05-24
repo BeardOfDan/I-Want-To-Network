@@ -5,24 +5,6 @@ const User = mongoose.model('user');
 
 const { filterByDist } = require('./../utility/matchByDist');
 
-const getMatchingUsers = async (criteria, user) => {
-  const { state, city } = user;
-
-  switch (criteria) {
-    case 'state':
-      return await User.find({ state });
-
-    case 'city':
-      return await User.find({ state, city });
-
-    case 'distance':
-
-      break;
-
-    default:
-  }
-};
-
 module.exports = (app) => {
   app.get('/api/people', requireLogin, async (req, res, next) => {
     const users = await User.find({});
@@ -71,9 +53,25 @@ module.exports = (app) => {
 
   app.post('/api/userCountFiltered/:state', requireLogin, async (req, res, next) => {
     const { state } = req.params;
-    const { criteria, city, distance } = req.body;
+    const { criteria, city } = req.body;
 
-    const matches = await getMatchingUsers(criteria, req.user);
+    if (typeof state !== 'string') {
+      return res.json({ 'error': 'No state was given!' });
+    }
+
+    if ((criteria !== 'state') && (criteria !== 'city')) {
+      return res.json({ 'error': 'Invalid search criteria' });
+    }
+
+    if ((criteria === 'city') && (typeof city !== 'string')) {
+      return res.json({ 'error': 'Cannot search by city without a city' });
+    }
+
+    const matches = (criteria === 'city') ? (await User.find({ state, city })) : (await User.find({ state }));
+
+    if (matches.error) {
+      return res.json({ 'error': matches.error });
+    }
 
     const userCount = matches.length;
     const location = city ? `${city}, ${state}` : state;
@@ -84,10 +82,14 @@ module.exports = (app) => {
   app.post('/api/userCountDistance/:miles', requireLogin, async (req, res, next) => {
     const { miles } = req.params;
 
+    if (typeof miles !== 'number') {
+      return res.json({ 'error': 'Must provide distance' });
+    }
+
     const matches = await filterByDist(req.user, (await User.find({})), miles);
 
-    if (matches.error !== undefined) {
-      return res.json({ miles, 'matches': [], 'error': matches.error });
+    if (matches.error) {
+      return res.json({ 'error': matches.error });
     }
 
     return res.json({ miles, matches });

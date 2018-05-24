@@ -6,9 +6,9 @@ const userSchema = new Schema({
   'username': { 'type': String, 'required': true },
   'githubURL': { 'type': String, 'required': true },
   'photoURL': String, // GitHub profile picture
-  'linkedin': String, // OPTIONAL
-  'city': String, // OPTIONAL
-  'state': String, // OPTIONAL
+  'linkedin': String,
+  'city': String,
+  'state': String,
   'work': {
     'company': String,
     'title': String,
@@ -18,8 +18,8 @@ const userSchema = new Schema({
     }
   },
   'education': {
-    'Udemy': [{
-      'url': String, 'title': String
+    'Udemy': [{ // completed courses only
+      'instructors': [String], 'title': String, 'url': String
     }],
     'Udacity': [String] // Nanodegree names
     // No need to worry about irrelevant stuff like college

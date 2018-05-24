@@ -31,7 +31,7 @@ export default class App extends Component {
           <Route path="" component={() => <Header isLoggedIn={this.state.isLoggedIn} />} />
           <Route exact path="/" component={() => <Landing isLoggedIn={this.state.isLoggedIn} renderStyles={renderStyles} />} />
           <Route exact path="/profile" component={() => <Profile user={this.state.user} isLoggedIn={this.state.isLoggedIn} renderStyles={renderStyles} />} />
-          <Route path="/nearMe" component={() => <NearMe isLoggedIn={this.state.isLoggedIn} user={this.state.user} renderStyles={renderStyles} />} />
+          <Route exact path="/nearMe" component={() => <NearMe isLoggedIn={this.state.isLoggedIn} user={this.state.user} renderStyles={renderStyles} />} />
         </div>
       </BrowserRouter>
     );

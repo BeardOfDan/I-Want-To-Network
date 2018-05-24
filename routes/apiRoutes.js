@@ -69,7 +69,6 @@ module.exports = (app) => {
   // NOTE: User does NOT need to be logged in to see this
   app.get('/api/userCount', async (req, res, next) => {
     const userCount = (await User.find({})).length;
-
     res.json(userCount);
   });
 
@@ -85,4 +84,4 @@ module.exports = (app) => {
     return res.json({ matches, userCount, location });
   });
 
-};
+}; // end of module.exports

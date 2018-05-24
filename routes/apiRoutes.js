@@ -24,7 +24,6 @@ const getMatchingUsers = async (criteria, user) => {
 module.exports = (app) => {
   app.get('/api/people', requireLogin, async (req, res, next) => {
     const users = await User.find({});
-
     res.json(users);
   });
 

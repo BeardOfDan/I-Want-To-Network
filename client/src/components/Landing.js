@@ -104,6 +104,9 @@ export default class Landing extends Component {
   render() {
     return (
       <div style={this.props.renderStyles} >
+        {
+          // TODO: add 'X people have registered'
+        }
         {this.pageContent()}
       </div>
     );

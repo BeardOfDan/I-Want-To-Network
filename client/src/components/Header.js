@@ -33,7 +33,7 @@ export default class Header extends Component {
     return (
       <nav style={{ 'paddingLeft': 25, 'paddingRight': 25 }}>
         <div className="nav-wrapper">
-          <Link to='/' className="left brand-logo">
+          <Link to="/" className="left brand-logo">
             Dev Net
           </Link>
           <ul className="right">

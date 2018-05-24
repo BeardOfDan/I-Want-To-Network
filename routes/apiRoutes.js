@@ -36,21 +36,21 @@ module.exports = (app) => {
     const values = {};
 
     if (typeof linkedIn === 'string') {
-      values.linkedin = linkedIn;
+      values.linkedin = linkedIn.trim();
     }
 
     if (typeof state === 'string') {
-      values.state = state;
+      values.state = state.trim();
 
       // don't have a city without a state
       if (typeof city === 'string') {
-        values.city = city;
+        values.city = city.trim();
       }
     }
 
     const updatedUser = await User.findOneAndUpdate({ '_id': user.id }, { '$set': values }, { 'new': true })
       .catch((e) => {
-        res.json({ 'error': `Could not update user with id ${user.id}` });
+        res.json({ 'error': `Could not update user with username ${user.username}` });
       });
 
     if ((updatedUser !== undefined) && (updatedUser !== null)) {

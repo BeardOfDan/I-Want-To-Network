@@ -51,16 +51,16 @@ export default class Profile extends Component {
   }
 
   addLinkedIn() {
-    const URL = document.getElementById('linkedInURL').value;
+    const URL = document.getElementById('linkedInURL').value.trim();
     this.setState({ 'linkedIn': URL });
   }
 
   changeState(state) {
-    this.setState({ 'state': (state !== null) ? state.value : '' });
+    this.setState({ 'state': (state !== null) ? state.value.trim() : '' });
   }
 
   changeCity() {
-    const city = document.getElementById('city').value;
+    const city = document.getElementById('city').value.trim();
     this.setState({ city });
   }
 

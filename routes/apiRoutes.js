@@ -84,7 +84,7 @@ module.exports = (app) => {
   app.post('/api/userCountDistance/:miles', requireLogin, async (req, res, next) => {
     const { miles } = req.params;
 
-    const matches = [];
+    const matches = await filterByDist(req.user, (await User.find({})), miles);
 
     return res.json({ miles, matches });
   });

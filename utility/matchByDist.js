@@ -13,7 +13,10 @@ const getCoordinatesFromLocation = (location) => {
 
   return axios.get(path)
     .then((res) => {
-      return Coordinates[location] = res.data.results.geometry.location;
+      return Coordinates[location] = res.data.results[0].geometry.location;
+    })
+    .catch((e) => {
+      return { 'error': 'Axios Error!' };
     });
 };
 
@@ -47,10 +50,12 @@ const getCoordinatesFromUserData = (user) => {
 // Borrowed (and altered) code from https://www.movable-type.co.uk/scripts/latlong.html
 const getCoordsDist = (alpha, beta) => {
   const R = 3959; // Earth's radius (miles)
-  const φ1 = alpha.lat.toRadians();
-  const φ2 = beta.lat.toRadians();
-  const Δφ = (beta.lat - alpha.lat).toRadians();
-  const Δλ = (beta.lng - alpha.lng).toRadians();
+
+  // Note: The '* (Math.PI / 180)' converts the values to Radians
+  const φ1 = alpha.lat * (Math.PI / 180);
+  const φ2 = beta.lat * (Math.PI / 180);
+  const Δφ = (beta.lat - alpha.lat) * (Math.PI / 180);
+  const Δλ = (beta.lng - alpha.lng) * (Math.PI / 180);
 
   const a = (Math.sin(Δφ / 2) ** 2) + Math.cos(φ1) * Math.cos(φ2)
     * (Math.sin(Δλ / 2) ** 2);
@@ -65,16 +70,35 @@ module.exports = {
   // people is the totality of all users in the database
   // dist is the distance (in miles) for the search
   'filterByDist': async (user, people, dist) => {
-    const userCoords = getCoordinatesFromUserData(user);
+    const userCoords = await getCoordinatesFromUserData(user);
+
+    if (userCoords.error !== undefined) {
+      console.log('userCoords Error!');
+      return people;
+    }
 
     const coordList = people.reduce((accumulator, person, index, collection) => {
-      accumulator.push(getCoordinatesFromUserData(person));
+      const value = getCoordinatesFromUserData(person);
+
+      if (value.error !== undefined) {
+        console.log(`People[${index}] Error!`);
+        return accumulator;
+      }
+
+      accumulator.push(value);
+
+      return accumulator;
     }, []);
 
     await Promise.all(coordList);
 
-    return users.filter((user, index, collection) => {
-      return dist > (getCoordsDist(userCoords, coordList[index]));
+    return people.filter((user, index, collection) => {
+      if (coordList[index].error !== undefined) {
+        console.log('Error in people filter, index: ' + index);
+        return false;
+      }
+
+      return dist >= (getCoordsDist(userCoords, coordList[index]));
     });
-  }
+  } // end of filterByDist
 };

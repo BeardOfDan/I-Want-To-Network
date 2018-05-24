@@ -79,4 +79,12 @@ module.exports = (app) => {
     return res.json({ matches, userCount, location });
   });
 
+  app.post('/api/userCountDistance/:miles', requireLogin, async (req, res, next) => {
+    const { miles } = req.params;
+
+    const matches = [];
+
+    return res.json({ miles, matches });
+  });
+
 }; // end of module.exports

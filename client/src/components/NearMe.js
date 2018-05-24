@@ -18,7 +18,7 @@ export default class NearMe extends Component {
     this.state = {
       'user': this.props.user,
       'loggedIn': this.props.isLoggedIn,
-      'criteria': 'state', // can be 'state', 'city' (meaning city, state), or distance (in miles)
+      'criteria': 'distance', // can be 'state', 'city' (meaning city, state), or distance (in miles)
       'distance': 0, // miles from user's city, state
       'matches': { 'state': [], 'city': [], 'distance': [] }
     };
@@ -30,7 +30,7 @@ export default class NearMe extends Component {
 
   changeDistance() {
     const distance = document.getElementById('distance').value;
-    this.setState({ 'distance': distance.value });
+    this.setState({ 'distance': distance });
   }
 
   getCriteriaPath(criteria) {
@@ -40,7 +40,7 @@ export default class NearMe extends Component {
         return `/api/userCountFiltered/${this.state.user.state}/`;
 
       case 'distance':
-        return 'qwertyuiop';
+        return `/api/userCountDistance/${this.state.distance}/`;
 
       default:
         console.log(`Error! Invalid Search Criteria: '${criteria}'`);
@@ -72,10 +72,12 @@ export default class NearMe extends Component {
         const matches = this.state.matches;
         matches[this.state.criteria] = res.data.matches;
 
+        console.log('res.data: ' + JSON.stringify(res.data, undefined, 2));
+
         this.setState({ matches });
       })
       .catch((e) => {
-        console.log(`\n\nAxios Error!:  ${JSON.stringify(e, undefined, 2)} \n\n`);
+        console.log(`\n\nAxios Error!: \n${JSON.stringify(e, undefined, 2)} \n\n`);
       });
 
   }

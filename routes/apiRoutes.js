@@ -3,6 +3,8 @@ const requireLogin = require('./../middleware/requireLogIn');
 const mongoose = require('mongoose');
 const User = mongoose.model('user');
 
+const { filterByDist } = require('./../utility/matchByDist');
+
 const getMatchingUsers = async (criteria, user) => {
   const { state, city } = user;
 

@@ -54,9 +54,7 @@ const getCoordsDist = (alpha, beta) => {
 
   const a = (Math.sin(Δφ / 2) ** 2) + Math.cos(φ1) * Math.cos(φ2)
     * (Math.sin(Δλ / 2) ** 2);
-
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
   const d = R * c;
 
   return d;

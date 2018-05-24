@@ -56,16 +56,16 @@ export default class Profile extends Component {
   }
 
   addLinkedIn() {
-    const URL = document.getElementById('linkedInURL').value.trim();
+    const URL = document.getElementById('linkedInURL').value;
     this.setState({ 'linkedIn': URL });
   }
 
   changeState(state) {
-    this.setState({ 'state': (state !== null) ? state.value.trim() : '' });
+    this.setState({ 'state': (state !== null) ? state.value : '' });
   }
 
   changeCity() {
-    const city = document.getElementById('city').value.trim();
+    const city = document.getElementById('city').value;
     this.setState({ city });
   }
 
@@ -81,15 +81,15 @@ export default class Profile extends Component {
     const values = {};
 
     if (this.state.state) {
-      values.state = this.state.state;
+      values.state = this.state.state.trim();
 
       if (this.state.city) {
-        values.city = this.state.city;
+        values.city = this.state.city.trim();
       }
     }
 
     if (this.state.linkedIn) {
-      values.linkedIn = this.state.linkedIn;
+      values.linkedIn = this.state.linkedIn.trim();
     }
 
     if (this.state.available !== 'undefined') {
@@ -120,9 +120,6 @@ export default class Profile extends Component {
   }
 
   pageContent() {
-
-    console.log('pageContent, action: ' + this.state.action);
-
     switch (this.state.action) {
       // TODO: Add nice styling + possibly add an animation of some kind (at least for pending)
 
@@ -139,6 +136,7 @@ export default class Profile extends Component {
           <div>
             <h4>You have successfully update your profile information!</h4>
             {/* TODO: use this.state.updatedValues to display what the new values are */}
+            {/* on event confirmation button is pressed -> this.props.updateUser(updatedUser) */}
           </div>
         );
 
@@ -183,11 +181,10 @@ export default class Profile extends Component {
               </FormGroup>
               <FormGroup inline="true">
                 <label>City:</label>
-                {/* <input id="city" value={this.state.city} type="text" placeholder="City" onKeyPress={this.changeCity.bind(this)} /> */}
                 <input id="city" value={this.state.city} type="text" placeholder="City" onChange={this.changeCity.bind(this)} />
               </FormGroup>
               <FormGroup>
-                <label>Available to work on a project:</label>
+                <label>Available to help on a project:</label>
                 <Select name="available" value={this.state.available}
                   onChange={this.changeAvailability.bind(this)}
                   options={[

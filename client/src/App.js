@@ -24,13 +24,18 @@ export default class App extends Component {
     LoggedIn(this.setState.bind(this));
   }
 
+  updateUser(user) {
+    console.log('updateUser: ' + JSON.stringify(user, undefined, 2));
+    this.setState({ user });
+  }
+
   render() {
     return (
       <BrowserRouter>
         <div>
           <Route path="" component={() => <Header isLoggedIn={this.state.isLoggedIn} />} />
           <Route exact path="/" component={() => <Landing isLoggedIn={this.state.isLoggedIn} renderStyles={renderStyles} />} />
-          <Route exact path="/profile" component={() => <Profile user={this.state.user} isLoggedIn={this.state.isLoggedIn} renderStyles={renderStyles} />} />
+          <Route exact path="/profile" component={() => <Profile user={this.state.user} isLoggedIn={this.state.isLoggedIn} renderStyles={renderStyles} updateUser={this.updateUser.bind(this)} />} />
           <Route exact path="/nearMe" component={() => <NearMe isLoggedIn={this.state.isLoggedIn} user={this.state.user} renderStyles={renderStyles} />} />
         </div>
       </BrowserRouter>

@@ -1,7 +1,10 @@
 const axios = require('axios');
 
+// TODO: Check and see if there are any instances of cities with the same
+// name as any of the state values in client/src/components/utility/stateOptions.js
+
 const Coordinates = {
-  // Examples by keys:
+  // Coordinates key examples by user data:
   // user data -> {'state': 'California'}
   //   key -> 'California'
   // user data -> {'city': 'San Jose', 'state': 'California'}
@@ -74,14 +77,17 @@ module.exports = {
 
     if (userCoords.error !== undefined) {
       console.log('userCoords Error!');
-      return people;
+      return { 'error': 'Could not get user\'s coordinates' };
     }
 
     const coordList = people.reduce((accumulator, person, index, collection) => {
       const value = getCoordinatesFromUserData(person);
 
       if (value.error !== undefined) {
-        console.log(`People[${index}] Error!`);
+        console.log(`\n\nPeople[${index}] Error!`);
+        console.log(`${JSON.stringify(collection[index])}\n\n`);
+
+        accumulator.push({ 'error': 'Skip me in filter' });
         return accumulator;
       }
 
@@ -94,7 +100,6 @@ module.exports = {
 
     return people.filter((user, index, collection) => {
       if (coordList[index].error !== undefined) {
-        console.log('Error in people filter, index: ' + index);
         return false;
       }
 

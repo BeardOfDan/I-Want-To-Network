@@ -86,6 +86,10 @@ module.exports = (app) => {
 
     const matches = await filterByDist(req.user, (await User.find({})), miles);
 
+    if (matches.error !== undefined) {
+      return res.json({ miles, 'matches': [], 'error': matches.error });
+    }
+
     return res.json({ miles, matches });
   });
 

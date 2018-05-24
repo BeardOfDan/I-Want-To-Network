@@ -11,6 +11,14 @@ import makePeopleCards from './helpers/makePeopleCards.js';
 
 import FormStyles from './styles/formStyles.js';
 
+// This is a user to use to display that an error occurred during the search for other users
+const errorUser = {
+  'email': 'ERROR@ERROR.com',
+  'username': 'ERROR',
+  'githubURL': 'github.com/ERROR',
+  'photoURL': 'https://thumb9.shutterstock.com/display_pic_with_logo/481717/230429635/stock-vector-error-stamp-230429635.jpg'
+};
+
 export default class NearMe extends Component {
   constructor(props) {
     super(props);
@@ -70,9 +78,15 @@ export default class NearMe extends Component {
     axios.post(path, values)
       .then((res) => {
         const matches = this.state.matches;
-        matches[this.state.criteria] = res.data.matches;
 
-        console.log('res.data: ' + JSON.stringify(res.data, undefined, 2));
+        if (res.data.error !== undefined) {
+          errorUser.username = 'Error:';
+          errorUser.state = res.data.error;
+
+          matches[this.state.criteria] = [errorUser];
+        }
+
+        matches[this.state.criteria] = res.data.matches;
 
         this.setState({ matches });
       })

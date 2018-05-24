@@ -31,11 +31,11 @@ const cardRows = (people) => { // turns an array of cards into an array of array
   const rows = [];
 
   for (let i = 0; i < people.length; i += _.rowLength) {
-    const rowIndex = i / _.rowLength;
+    const rowIndex = ~~(i / _.rowLength);
     rows[rowIndex] = [];
 
-    for (let j = 0; (j < _.rowLength) && ((rowIndex + j < people.length)); j++) {
-      rows[rowIndex][j] = makePersonCard(people[rowIndex + j]);
+    for (let j = 0; (j < _.rowLength) && (((i + j) < people.length)); j++) {
+      rows[rowIndex][j] = makePersonCard(people[i + j]);
     }
   }
 

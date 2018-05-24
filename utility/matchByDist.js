@@ -76,7 +76,7 @@ module.exports = {
     const userCoords = await getCoordinatesFromUserData(user);
 
     if (userCoords.error) {
-      console.log('userCoords Error!');
+      console.log('userCoords Error: ' + JSON.stringify(userCoords.error, undefined, 2));
       return { 'error': 'Could not get user\'s coordinates' };
     }
 

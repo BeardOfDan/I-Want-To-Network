@@ -84,12 +84,12 @@ export default class NearMe extends Component {
           errorUser.state = res.data.error;
 
           matches[this.state.criteria] = [errorUser];
+        } else {
+          // Add matches (except for the current user)
+          matches[this.state.criteria] = res.data.matches.filter((user, index, people) => {
+            return user.username !== this.state.user.username;
+          });
         }
-
-        // Add matches (except for the current user)
-        matches[this.state.criteria] = res.data.matches.filter((user, index, people) => {
-          return user.username !== this.state.user.username;
-        });
 
         this.setState({ matches });
       })

@@ -84,7 +84,7 @@ module.exports = (app) => {
   });
 
   app.post('/api/userCountDistance/:miles', requireLogin, async (req, res, next) => {
-    const { miles } = req.params;
+    const miles = ~~req.params.miles;
 
     if (typeof miles !== 'number') {
       return res.json({ 'error': 'Must provide distance' });

@@ -22,10 +22,6 @@ const getMatchingUsers = async (criteria, user) => {
 };
 
 module.exports = (app) => {
-  app.post('/api/newUser', (req, res, next) => {
-    res.send('You are a new user, who should sign up!');
-  });
-
   app.get('/api/people', requireLogin, async (req, res, next) => {
     const users = await User.find({});
 

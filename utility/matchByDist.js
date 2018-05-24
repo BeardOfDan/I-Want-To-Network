@@ -43,8 +43,23 @@ const getCoordinatesFromUserData = (user) => {
 };
 
 // Returns distance in miles between two coordinates
+// Uses Haversine formula
+// Borrowed (and altered) code from https://www.movable-type.co.uk/scripts/latlong.html
 const getCoordsDist = (alpha, beta) => {
-  return 9001;
+  const R = 3959; // Earth's radius (miles)
+  const φ1 = alpha.lat.toRadians();
+  const φ2 = beta.lat.toRadians();
+  const Δφ = (beta.lat - alpha.lat).toRadians();
+  const Δλ = (beta.lng - alpha.lng).toRadians();
+
+  const a = (Math.sin(Δφ / 2) ** 2) + Math.cos(φ1) * Math.cos(φ2)
+    * (Math.sin(Δλ / 2) ** 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const d = R * c;
+
+  return d;
 };
 
 module.exports = {

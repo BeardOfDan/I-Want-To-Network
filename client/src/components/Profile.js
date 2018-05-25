@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Form, FormGroup } from 'react-bootstrap';
+import { Alert, Button, Grid, Form, FormGroup } from 'react-bootstrap';
 import axios from 'axios';
 
 import Select from 'react-select';
@@ -21,7 +21,7 @@ export default class Profile extends Component {
       'action': null, // null, 'pending', 'success', or 'error'
       'user': this.props.user,
       'isLoggedIn': this.props.isLoggedIn,
-      'updatedValues': null, // this is returned from the api after the update occurs
+      'updatedUser': null, // this is returned from the api after the update occurs
       'linkedIn': '',
       'state': '',
       'city': '',
@@ -53,6 +53,36 @@ export default class Profile extends Component {
     }
 
     this.setState(values);
+  }
+
+  getChangedFields() {
+    const updated = this.state.updatedUser;
+    const original = this.props.user;
+
+    const changedKeys = [];
+
+    for (let key in updated) {
+      if (updated[key].toString() !== original[key].toString()) {
+        console.log('key: ' + key);
+        changedKeys.push(key);
+      }
+    }
+
+    return changedKeys;
+  }
+
+  getChangeStats() {
+    const fieldStats = this.getChangedFields().map((field, index, fields) => {
+      return (
+        <div key={index}>
+          <h4>{field}</h4>
+        </div>
+      );
+    });
+
+    console.log('getChangedFields: ' + JSON.stringify(this.getChangedFields(), undefined, 2));
+
+    return fieldStats;
   }
 
   addLinkedIn() {
@@ -99,7 +129,7 @@ export default class Profile extends Component {
     axios.post('/api/updateProfile', values)
       .then((res) => {
         const newAction = (res.data.error === undefined) ? 'success' : 'error';
-        this.setState({ 'action': newAction, 'updatedValues': res.data.updatedUser });
+        this.setState({ 'action': newAction, 'updatedUser': res.data.updatedUser });
 
         if (newAction === 'error') {
           console.log('\n\naxios error: ' + JSON.stringify(res.data, undefined, 2));
@@ -134,9 +164,38 @@ export default class Profile extends Component {
         // TODO: Put big button to prompt the user to return to the home page or something
         return (
           <div>
-            <h4>You have successfully update your profile information!</h4>
+
             {/* TODO: use this.state.updatedValues to display what the new values are */}
             {/* on event confirmation button is pressed -> this.props.updateUser(updatedUser) */}
+
+            <Alert bsStyle="success" onDismiss={this.handleDismiss}>
+              <h4>You have successfully update your profile information!</h4>
+
+              {/* Your updated user object is {JSON.stringify(this.state.updatedUser, undefined, 2)} */}
+
+              {
+                this.getChangeStats()
+
+                // + JSON.stringify(this.getChangedFields().map((el, i, collection) => {
+
+                //   console.log(this.state.updatedUser[el]);
+
+                //   return this.state.updatedUser[el].toString();
+                // }), undefined, 2)
+              }
+
+              {/* Use this.props.user to determine what has changed in this.state
+                then use that to determine what to display as being a changed value
+              also show the before value too */}
+
+
+              <p>
+                <Button bsStyle="primary">Take this action</Button>
+                <span> or </span>
+                <Button onClick={this.handleDismiss}>Hide Alert</Button>
+              </p>
+            </Alert>
+
           </div>
         );
 

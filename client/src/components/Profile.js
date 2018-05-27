@@ -63,7 +63,6 @@ export default class Profile extends Component {
 
     for (let key in updated) {
       if (updated[key].toString() !== original[key].toString()) {
-        console.log('key: ' + key);
         changedKeys.push(key);
       }
     }
@@ -72,15 +71,36 @@ export default class Profile extends Component {
   }
 
   getChangeStats() {
-    const fieldStats = this.getChangedFields().map((field, index, fields) => {
-      return (
-        <div key={index}>
-          <h4>{field}</h4>
-        </div>
-      );
-    });
+    // const fieldStats = this.getChangedFields().map((field, index, fields) => {
+    //   console.log('\nfield: ' + field);
+    //   console.log('previous: ' + this.props.user[field]);
+    //   console.log('current: ' + this.state.updatedUser[field]);
+    //   return (
+    //     <li key={index}>Hello</li>
+    //     // <li key={index}>
+    //     //   <h4>{field}</h4>
+    //     //   <h6>Previous: {this.props.user[field]}</h6>
+    //     //   <h6>Current: {this.state.updatedUser[field]}</h6>
+    //     // </li>
+    //   );
+    // });
 
-    console.log('getChangedFields: ' + JSON.stringify(this.getChangedFields(), undefined, 2));
+    const changedFields = this.getChangedFields();
+    const fieldStats = [];
+
+    for (let i = 0; i < changedFields.length; i++) {
+      const current = `<li key={${i}}><h4>${changedFields[i]}</h4><h6>Previous: ${this.props.user[changedFields[i]]}</h6><h6>Current: ${this.state.updatedUser[changedFields[i]]}</h6></li>`;
+
+      fieldStats.push(current);
+    }
+
+    console.log('\n\nfieldStats: ' + JSON.stringify(fieldStats, undefined, 2));
+
+    // return [ // simple hardcoded array, so simple hardcoded keys
+    //   <li key="0"><p to="/nearMe">Near Me</p></li>,
+    //   <li key="1"><p to="/profile">Profile</p></li>,
+    //   <li key="2"><a href="/auth/logout">Logout</a></li>
+    // ];
 
     return fieldStats;
   }
@@ -169,25 +189,14 @@ export default class Profile extends Component {
             {/* on event confirmation button is pressed -> this.props.updateUser(updatedUser) */}
 
             <Alert bsStyle="success" onDismiss={this.handleDismiss}>
-              <h4>You have successfully update your profile information!</h4>
+              <h2>You have successfully update your profile information!</h2>
 
               {/* Your updated user object is {JSON.stringify(this.state.updatedUser, undefined, 2)} */}
 
-              {
-                this.getChangeStats()
-
-                // + JSON.stringify(this.getChangedFields().map((el, i, collection) => {
-
-                //   console.log(this.state.updatedUser[el]);
-
-                //   return this.state.updatedUser[el].toString();
-                // }), undefined, 2)
-              }
-
-              {/* Use this.props.user to determine what has changed in this.state
-                then use that to determine what to display as being a changed value
-              also show the before value too */}
-
+              <h4>Changed Fields:</h4>
+              <ul>
+                {this.getChangeStats()}
+              </ul>
 
               <p>
                 <Button bsStyle="primary">Take this action</Button>

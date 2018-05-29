@@ -25,7 +25,8 @@ export default class Profile extends Component {
       'linkedIn': '',
       'state': '',
       'city': '',
-      'available': false
+      'available': false,
+      'changes': [] // changed values, ex: [{'field': 'available', 'previous': 'false', 'current': true}]
     };
   }
 

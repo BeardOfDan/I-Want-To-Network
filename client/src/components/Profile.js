@@ -103,6 +103,12 @@ export default class Profile extends Component {
     //   <li key="2"><a href="/auth/logout">Logout</a></li>
     // ];
 
+    // TODO: change fieldStats from ['fieldName'] to [{'field', 'previous', 'previous'}]
+
+    if (JSON.stringify(this.state.changes) != JSON.stringify(fieldStats)) {
+      this.setState({ 'changes': fieldStats });
+    }
+
     return fieldStats;
   }
 
@@ -197,6 +203,12 @@ export default class Profile extends Component {
               <h4>Changed Fields:</h4>
               <ul>
                 {this.getChangeStats()}
+                {this.state.changes.map((el, i, col) => {
+                  return (
+                    <li>{`Changed Field: ${el}`}</li>
+                  );
+                })}
+                {console.log(JSON.stringify(this.state.changes, undefined, 2))}
               </ul>
 
               <p>

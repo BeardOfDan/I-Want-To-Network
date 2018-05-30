@@ -86,6 +86,10 @@ export default class Profile extends Component {
     //   );
     // });
 
+    if (this.state.changes.length > 0) {
+      return this.state.changes;
+    }
+
     const changedFields = this.getChangedFields();
     const fieldStats = [];
 

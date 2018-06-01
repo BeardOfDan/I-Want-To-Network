@@ -17,6 +17,8 @@ export default class Profile extends Component {
   constructor(props) {
     super(props);
 
+    console.log('this.props.user: ' + this.props.user + '\n\n');
+
     this.state = {
       'action': null, // null, 'pending', 'success', or 'error'
       'user': this.props.user,
@@ -71,6 +73,55 @@ export default class Profile extends Component {
     return changedKeys;
   }
 
+  setChanges() {
+    const keys = this.getChangedFields();
+    const changes = [];
+
+    for (let i = 0; i < keys.length; i++) {
+      changes[i] = {
+        'field': keys[i],
+        'previous': this.props.user[keys[i]],
+        'current': this.state.user[keys[i]]
+      };
+    }
+
+    this.setState({ changes });
+    return changes;
+  }
+
+  getChanges() {
+    const updated = this.state.updatedUser;
+    const original = this.props.user;
+
+    const keys = [];
+    const changes = [];
+
+    for (let key in updated) {
+
+      console.log('\nkey: ' + key);
+      console.log('updated[key]: ' + updated[key].toString());
+      console.log('original[key]: ' + original[key].toString());
+
+      if (updated[key].toString() !== original[key].toString()) {
+
+        console.log('changed key: ' + key);
+
+        keys.push(key);
+      }
+    }
+
+    for (let i = 0; i < keys.length; i++) {
+      changes[i] = {
+        'field': keys[i],
+        'previous': this.props.user[keys[i]],
+        'current': this.state.user[keys[i]]
+      };
+    }
+
+    // this.setState({ changes });
+    return changes;
+  }
+
   getChangeStats() {
     // const fieldStats = this.getChangedFields().map((field, index, fields) => {
     //   console.log('\nfield: ' + field);
@@ -87,6 +138,9 @@ export default class Profile extends Component {
     // });
 
     if (this.state.changes.length > 0) {
+
+      console.log('Unnecessary call to getChangeStats');
+
       return this.state.changes;
     }
 
@@ -94,12 +148,22 @@ export default class Profile extends Component {
     const fieldStats = [];
 
     for (let i = 0; i < changedFields.length; i++) {
-      const current = `<li key={${i}}><h4>${changedFields[i]}</h4><h6>Previous: ${this.props.user[changedFields[i]]}</h6><h6>Current: ${this.state.updatedUser[changedFields[i]]}</h6></li>`;
+      const fieldName = changedFields[i];
+
+      const current = (
+        <li key={i}>
+          <h4>{fieldName}</h4>
+          <h6>Previous: {this.props.user[fieldName]}</h6>
+          <h6>Current: {this.state.updatedUser[fieldName]}</h6>
+        </li>
+      );
 
       fieldStats.push(current);
+
+      // fieldStats.push(changedFields[i]);
     }
 
-    console.log('\n\nfieldStats: ' + JSON.stringify(fieldStats, undefined, 2));
+    // console.log('\n\nfieldStats: ' + JSON.stringify(fieldStats, undefined, 2));
 
     // return [ // simple hardcoded array, so simple hardcoded keys
     //   <li key="0"><p to="/nearMe">Near Me</p></li>,
@@ -109,9 +173,7 @@ export default class Profile extends Component {
 
     // TODO: change fieldStats from ['fieldName'] to [{'field', 'previous', 'previous'}]
 
-    if (JSON.stringify(this.state.changes) != JSON.stringify(fieldStats)) {
-      this.setState({ 'changes': fieldStats });
-    }
+    // this.setState({ 'changes': changedFields });
 
     return fieldStats;
   }
@@ -158,13 +220,8 @@ export default class Profile extends Component {
     }
 
     axios.post('/api/updateProfile', values)
-      .then((res) => {
+      .then(async (res) => {
         const newAction = (res.data.error === undefined) ? 'success' : 'error';
-        this.setState({ 'action': newAction, 'updatedUser': res.data.updatedUser });
-
-        if (newAction === 'error') {
-          console.log('\n\naxios error: ' + JSON.stringify(res.data, undefined, 2));
-        }
 
         // Update local React copy of user
         const updatedUser = this.state.user;
@@ -172,11 +229,23 @@ export default class Profile extends Component {
           updatedUser[key] = values[key];
         }
 
-        this.setState({ 'user': updatedUser });
+        // await this.setState({ 'user': updatedUser });
+        await this.setState({
+          'action': newAction,
+          'updatedUser': res.data.updatedUser,
+          'user': updatedUser
+        });
+
+        // await this.setChanges();
+
+        if (newAction === 'error') {
+          console.log('\n\naxios error: ' + JSON.stringify(res.data, undefined, 2));
+        }
       })
       .catch((e) => {
         this.setState({ 'action': 'error' });
-        console.log('\n\nError!\n' + e); // TODO: Add logging or something to note this event
+        console.log(`\n\nError! Error Object keys: ${Object.keys(e)}`);
+        // console.log('\n\nError!\n' + e); // TODO: Add logging or something to note this event
       });
   }
 
@@ -206,13 +275,42 @@ export default class Profile extends Component {
 
               <h4>Changed Fields:</h4>
               <ul>
-                {this.getChangeStats()}
-                {this.state.changes.map((el, i, col) => {
+                {/* {this.getChangeStats()} */}
+                {
+                  this.state.changes.length
+                }
+
+                {
+                  this.getChanges().map((change, index, collection) => {
+                    return (
+                      <li key={index}>
+                        <h4>{change.field}</h4>
+                        <h6>Previous: {change.previous}</h6>
+                        <h6>Current: {change.current}</h6>
+                      </li>
+                    );
+                  })
+                }
+
+                {
+                  this.state.changes.map((change, index, collection) => {
+                    return (
+                      <li key={index}>
+                        <h4>{change.field}</h4>
+                        <h6>Previous: {change.previous}</h6>
+                        <h6>Current: {change.current}</h6>
+                      </li>
+                    );
+                  })
+                }
+                <hr />
+                {/* {this.state.changes.map((el, i, col) => {
                   return (
-                    <li>{`Changed Field: ${el}`}</li>
+                    <li key={i}><h4>{el}</h4><h6>Previous: {this.props.user[el]}</h6><h6>Current: {this.state.updatedUser[el]}</h6></li>
+                    // <li>{`Changed Field: ${el}`}</li>
                   );
-                })}
-                {console.log(JSON.stringify(this.state.changes, undefined, 2))}
+                })} */}
+                {/* {console.log(JSON.stringify(this.state.changes, undefined, 2))} */}
               </ul>
 
               <p>

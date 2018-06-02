@@ -155,9 +155,10 @@ export default class Profile extends Component {
 
         if (newAction === 'error') {
           console.log('\n\naxios error: ' + JSON.stringify(res.data, undefined, 2));
+
+          return this.setState({ 'action': newAction });
         }
 
-        // await this.setState({ 'user': updatedUser });
         this.setState({
           'action': newAction,
           'updatedUser': res.data.updatedUser,

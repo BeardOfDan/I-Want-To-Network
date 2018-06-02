@@ -191,37 +191,30 @@ export default class Profile extends Component {
       case 'success':
         // TODO: Put big button to prompt the user to return to the home page or something
         return (
-          <div>
+          <Alert bsStyle="success" onDismiss={this.handleDismiss}>
+            <h2>You have successfully update your profile information!</h2>
 
-            {/* TODO: use this.state.updatedValues to display what the new values are */}
-            {/* on event confirmation button is pressed -> this.props.updateUser(updatedUser) */}
+            <h4>Changed Fields:</h4>
+            <ul style={{ 'marginBottom': 30 }}>
+              {
+                this.state.changes.map((change, index, collection) => {
+                  return (
+                    <li style={listItemStyle} key={index}>
+                      <h5>{change.field.toString()}</h5>
+                      <h6>Previous Value: {change.previous.toString()}</h6>
+                      <h6>Current Value: {change.current.toString()}</h6>
+                    </li>
+                  );
+                })
+              }
+            </ul>
 
-            <Alert bsStyle="success" onDismiss={this.handleDismiss}>
-              <h2>You have successfully update your profile information!</h2>
-
-              <h4>Changed Fields:</h4>
-              <ul style={{ 'marginBottom': 30 }}>
-                {
-                  this.state.changes.map((change, index, collection) => {
-                    return (
-                      <li style={listItemStyle} key={index}>
-                        <h5>{change.field.toString()}</h5>
-                        <h6>Previous Value: {change.previous.toString()}</h6>
-                        <h6>Current Value: {change.current.toString()}</h6>
-                      </li>
-                    );
-                  })
-                }
-              </ul>
-
-              <p>
-                <Button bsStyle="primary">Take this action</Button>
-                <span> or </span>
-                <Button onClick={this.handleDismiss}>Hide Alert</Button>
-              </p>
-            </Alert>
-
-          </div>
+            <p>
+              <Button bsStyle="primary">Take this action</Button>
+              <span> or </span>
+              <Button onClick={this.handleDismiss}>Hide Alert</Button>
+            </p>
+          </Alert>
         );
 
       case 'error':

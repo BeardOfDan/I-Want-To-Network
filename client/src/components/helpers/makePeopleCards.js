@@ -13,8 +13,17 @@ const makePersonCard = (person) => {
   const location = (person.city ? (person.city + ', ') : '') + (person.state ? person.state : '');
   const linkedin = (<a href={person.linkedin} target="_blank" className="btn btn-primary" style={{ 'borderRadius': _.borderRadius, 'marginBottom': 10, 'marginLeft': _.marginLeftLinkedIn }}>{person.linkedin ? 'Check Out My LinkedIn' : ''}</a>);
 
+  const cardStyles = {
+    'width': '18rem',
+    'borderRadius': _.borderRadius
+  };
+
+  if (person.available) {
+    cardStyles.border = '4px solid gold';
+  }
+
   return (
-    <div key={person.id} className="card" style={{ 'width': '18rem', 'borderRadius': _.borderRadius }}>
+    <div key={person.id} className="card" style={cardStyles}>
       <img className="card-img-top" src={person.photoURL} alt={person.username + '\'s profile pic'} style={{ 'borderTopRightRadius': _.borderRadius, 'borderTopLeftRadius': _.borderRadius }} />
       <div className="card-body" style={{ 'borderRadius': _.borderRadius }}>
         <h5 className="card-title">{person.username}</h5>

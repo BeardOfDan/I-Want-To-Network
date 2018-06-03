@@ -77,30 +77,6 @@ export default class Profile extends Component {
     return changes;
   }
 
-  getChanges() {
-    const updated = this.state.updatedUser;
-    const original = this.props.user;
-
-    const keys = [];
-    const changes = [];
-
-    for (let key in updated) {
-      if (updated[key].toString() !== original[key].toString()) {
-        keys.push(key);
-      }
-    }
-
-    for (let i = 0; i < keys.length; i++) {
-      changes[i] = {
-        'field': keys[i],
-        'previous': this.props.user[keys[i]],
-        'current': this.state.user[keys[i]]
-      };
-    }
-
-    return changes;
-  }
-
   addLinkedIn() {
     const URL = document.getElementById('linkedInURL').value;
     this.setState({ 'linkedIn': URL });
@@ -138,6 +114,7 @@ export default class Profile extends Component {
       values.linkedIn = this.state.linkedIn.trim();
     }
 
+    // Note: Boolean false is a valid value
     if (this.state.available !== 'undefined') {
       values.available = this.state.available;
     }
@@ -155,7 +132,6 @@ export default class Profile extends Component {
 
         if (newAction === 'error') {
           console.log('\n\naxios error: ' + JSON.stringify(res.data, undefined, 2));
-
           return this.setState({ 'action': newAction });
         }
 
@@ -169,7 +145,7 @@ export default class Profile extends Component {
       .catch((e) => {
         this.setState({ 'action': 'error' });
         console.log(`\n\nError! Error Object keys: ${Object.keys(e)}`);
-        // console.log('\n\nError!\n' + e); // TODO: Add logging or something to note this event
+        // TODO: Add logging or something to note this event
       });
   }
 

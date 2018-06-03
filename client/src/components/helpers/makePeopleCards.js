@@ -3,7 +3,7 @@ import React from 'react';
 const _ = {
   'rowLength': 4,
   'borderRadius': '5%',
-  'marginLeftLinkedIn': '-5%',
+  'marginLeftLinkedIn': '-6.5%',
   'marginLeftGitHub': '-2.5%'
 }; // utility variable for options
 

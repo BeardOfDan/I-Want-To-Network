@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, Button, Grid, Form, FormGroup } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+
 import axios from 'axios';
 
 import Select from 'react-select';
@@ -187,9 +189,9 @@ export default class Profile extends Component {
             </ul>
 
             <p>
-              <Button bsStyle="primary">Take this action</Button>
+              <Link to="/nearMe"><Button>Find people near you</Button></Link>
               <span> or </span>
-              <Button onClick={this.handleDismiss}>Hide Alert</Button>
+              <Link to="/"><Button>Go to home page</Button></Link>
             </p>
           </Alert>
         );
